@@ -3,26 +3,42 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Portafolio ejecutivo de Azul Ruiz - Contador Público en formación, especializada en control de cobros Excel, administración y gestión administrativa. OpenToWork disponible para pasantías y empleo administrativo/contable en Córdoba Capital.">
-    <meta name="keywords" content="Azul Ruiz, portafolio, contador público, Excel, control de cobros, finanzas, administración, Córdoba, UNC, OpenToWork">
-    <meta name="author" content="Azul Ruiz">
-    <!-- Favicon -->
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%2285%22 font-size=%2290%22>🅐</text></svg>">
+    <meta name="description" content="Portafolio ejecutivo de Azul Ruiz - Estudiante de Contador Público (UNC), especializada en control de cobros Excel, administración y gestión administrativa. OpenToWork, disponible para pasantías y empleo administrativo/contable en Córdoba Capital." />
+    <meta name="keywords" content="Azul Ruiz, portafolio, contador público, Excel, control de cobros, administración, Córdoba, UNC, OpenToWork" />
+    <meta name="author" content="Azul Ruiz" />
 
-    <title>Azul Ruiz - Portafolio Ejecutivo Contador Público</title>
+    <!-- OpenGraph -->
+    <meta property="og:title" content="Azul Ruiz – Portafolio Ejecutivo" />
+    <meta property="og:description" content="Estudiante de Contador Público (UNC). Control de cobros, Excel, administración. OpenToWork en Córdoba." />
+    <meta property="og:image" content="https://josiasperalta.github.io/azul-ruiz-portfolio/assets/foto-azul.jpg" />
+    <meta property="og:url" content="https://josiasperalta.github.io/azul-ruiz-portfolio/" />
+    <meta property="og:type" content="website" />
+
+    <title>Azul Ruiz – Portafolio Ejecutivo</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Instrument+Serif:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
-    <!-- Tailwind CSS via CDN with custom palette -->
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
 
-    <!-- Lucide Icons -->
-    <script defer src="https://unpkg.com/lucide@latest/dist/ionicons/ lucide.min.js"></script>
+    <!-- QRCode.js (antes del módulo) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
-    <!-- Custom CSS (inline critical, rest in styles.css) -->
+    <!-- Lucide Icons — versión fija, sin defer para que esté disponible al cargar -->
+    <script src="https://unpkg.com/lucide@0.469.0/dist/umd/lucide.min.js"></script>
+
+    <!-- CSS personalizado -->
+    <link rel="stylesheet" href="css/styles.css" />
+
+    <!-- Script mínimo para clase JS (reveal fallback) -->
+    <script>document.documentElement.classList.add('js');</script>
+
     <style>
       :root {
         --bg-primary: #F8FAFC;
@@ -39,19 +55,16 @@
         --muted: #64748B;
       }
 
-      .light-mode * {
-        color-scheme: light;
-      }
-
       .dark-mode {
         --bg-primary: #0B0F19;
         --bg-card: #111827;
         --text-primary: #F8FAFC;
-        --text-secondary: #F1F5F9;
+        --text-secondary: #CBD5E1;
         --accent-navy: #3B82F6;
         --accent-royal: #60A5FA;
-        --border-dark: #374151;
-        --border-light: #1E293B;
+        --border-light: #374151;
+        --border-dark: #1E293B;
+        --muted: #94A3B8;
       }
 
       body {
@@ -61,397 +74,501 @@
         overflow-x: hidden;
       }
 
-      .font-serif {
-        font-family: 'Instrument Serif', serif;
-      }
-
-      /* Scrollbar personalizado */
-      ::-webkit-scrollbar {
-        width: 8px;
-        height: 8px;
-      }
-      ::-webkit-scrollbar-track {
-        background: transparent;
-      }
-      ::-webkit-scrollbar-thumb {
-        background-color: var(--border-light);
-        border-radius: 4px;
-      }
-      ::-webkit-scrollbar-thumb:hover {
-        background-color: var(--accent-emerald);
-      }
-
       /* Glassmorphism navbar */
       .glass-nav {
         backdrop-filter: blur(20px);
-        background: rgba(248, 250, 252, 0.8);
+        background: rgba(248, 250, 252, 0.88);
         border-bottom: 1px solid var(--border-light);
       }
-
       .dark-mode .glass-nav {
-        background: rgba(11, 15, 25, 0.8);
+        background: rgba(11, 15, 25, 0.88);
         border-bottom-color: var(--border-dark);
       }
 
-      /* Hero section styles */
-      .hero-badge {
-        animation: pulse-soft 2s ease-in-out infinite;
-      }
-
-      @keyframes pulse-soft {
-        0%, 100% { opacity: 1; }
-        50% { opacity: 0.8; }
-      }
-
-      /* Bento grid */
+      /* Bento card hover */
       .bento-card {
         transition: transform 0.3s ease, box-shadow 0.3s ease;
       }
       .bento-card:hover {
         transform: translateY(-4px);
-        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+        box-shadow: 0 12px 30px rgba(0,0,0,0.07);
       }
       .dark-mode .bento-card:hover {
-        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+        box-shadow: 0 12px 30px rgba(0,0,0,0.35);
       }
 
-      /* Filter chips */
-      .filter-chip {
-        transition: all 0.2s ease;
-      }
-      .filter-chip.selected {
-        background-color: var(--accent-royal);
-        color: white;
-      }
-      .filter-chip.selected::after {
-        opacity: 1;
-      }
-
-      /* Modal styles */
-      .modal-overlay {
-        background: rgba(0, 0, 0, 0.7);
-      }
-      .modal-content {
-        background: var(--bg-card);
-        border: 1px solid var(--border-light);
-      }
-      .dark-mode .modal-content {
-        border-color: var(--border-dark);
-      }
-
-      /* Toast notification */
-      .toast-active {
-        animation: toast-in 0.3s ease-out;
-      }
-      @keyframes toast-in {
-        from { opacity: 0; transform: translateY(-10px); }
-        to { opacity: 1; transform: translateY(0); }
-      }
-
-      /* Intersection Observer animations */
-      .reveal {
+      /* Reveal con respaldo: solo opacidad-0 si el JS está activo */
+      html.js .reveal {
         opacity: 0;
-        transform: translateY(30px);
+        transform: translateY(28px);
         transition: opacity 0.6s ease, transform 0.6s ease;
       }
-      .reveal.visible {
+      html.js .reveal.visible {
         opacity: 1;
         transform: translateY(0);
       }
-
-      /* Reduced motion */
       @media (prefers-reduced-motion: reduce) {
-        *, *::before, *::after {
-          animation-duration: 0.01ms !important;
-          animation-iteration-count: 1 !important;
-          transition-duration: 0.01ms !important;
-        }
+        html.js .reveal { opacity: 1; transform: none; transition: none; }
+      }
+
+      /* Filter chip */
+      .filter-chip { transition: all 0.2s ease; }
+      .filter-chip.selected {
+        background-color: var(--accent-royal);
+        color: white;
+        border-color: var(--accent-royal);
+      }
+
+      /* Modal overlay */
+      .modal-overlay {
+        position: fixed; inset: 0;
+        background: rgba(0,0,0,0.65);
+        backdrop-filter: blur(4px);
+        z-index: 200;
+        opacity: 0; visibility: hidden;
+        transition: opacity 0.3s ease, visibility 0.3s ease;
+        display: flex; align-items: center; justify-content: center;
+      }
+      .modal-overlay.open { opacity: 1; visibility: visible; }
+      .modal-content {
+        position: relative;
+        background: var(--bg-card);
+        border: 1px solid var(--border-light);
+        border-radius: 1rem;
+        padding: 2rem;
+        max-width: 560px;
+        width: 90%;
+        max-height: 90vh;
+        overflow-y: auto;
+        transform: scale(0.92);
+        transition: transform 0.3s ease;
+      }
+      .modal-overlay.open .modal-content { transform: scale(1); }
+      .dark-mode .modal-content { border-color: var(--border-dark); }
+
+      .modal-close {
+        position: absolute; top: 1rem; right: 1rem;
+        width: 32px; height: 32px; border-radius: 50%;
+        background: var(--border-light);
+        border: none; cursor: pointer;
+        display: flex; align-items: center; justify-content: center;
+        transition: background 0.2s;
+      }
+      .modal-close:hover { background: var(--accent-royal); color: white; }
+
+      /* Toast */
+      #toast { transition: opacity 0.3s ease, transform 0.3s ease; }
+      #toast.show { opacity: 1 !important; transform: translateY(0) !important; }
+
+      /* Scrollbar */
+      ::-webkit-scrollbar { width: 7px; height: 7px; }
+      ::-webkit-scrollbar-track { background: transparent; }
+      ::-webkit-scrollbar-thumb { background: var(--border-light); border-radius: 4px; }
+      ::-webkit-scrollbar-thumb:hover { background: var(--accent-emerald); }
+
+      /* Logo nowrap */
+      .logo-text { white-space: nowrap; }
+
+      /* Scroll margin para secciones con navbar fija */
+      section[id], footer[id] { scroll-margin-top: 80px; }
+
+      /* Menú móvil */
+      #mobile-menu {
+        display: none;
+        border-top: 1px solid var(--border-light);
+      }
+      #mobile-menu.open { display: block; }
+
+      /* btn-cta */
+      .btn-cta {
+        display: inline-flex; align-items: center; gap: 0.4rem;
+        padding: 0.5rem 1rem; border-radius: 0.5rem;
+        background: var(--accent-royal); color: white;
+        font-weight: 500; transition: background 0.2s;
+      }
+      .btn-cta:hover { background: var(--accent-navy); }
+
+      /* Hero title responsive */
+      .hero-title-text {
+        font-size: clamp(2.8rem, 8vw, 5.5rem);
+        font-weight: 700;
+        line-height: 1.05;
+        letter-spacing: -0.02em;
+      }
+
+      /* Foto hero */
+      .hero-photo {
+        width: 100%;
+        aspect-ratio: 4/5;
+        object-fit: cover;
+        border-radius: 1rem;
+        display: block;
+      }
+      .hero-photo-fallback {
+        display: none;
+        width: 100%;
+        aspect-ratio: 4/5;
+        border-radius: 1rem;
+        background: var(--accent-navy);
+        align-items: center;
+        justify-content: center;
+        font-size: 4rem;
+        font-weight: 700;
+        color: white;
+        letter-spacing: -0.02em;
+      }
+
+      /* Nota simulador */
+      .nota-simulador {
+        font-size: 0.78rem;
+        color: var(--muted);
+        border-left: 3px solid var(--border-light);
+        padding-left: 0.75rem;
+        margin-bottom: 1.25rem;
+        font-style: italic;
+      }
+
+      /* QR modal layout */
+      .qr-modal-inner {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1.25rem;
+        padding-top: 0.5rem;
+      }
+      .qr-modal-inner img {
+        width: 80px; height: 80px;
+        border-radius: 50%; object-fit: cover;
+        border: 3px solid var(--border-light);
+      }
+      #qr-code { margin: 0 auto; }
+      #qr-code img, #qr-code canvas {
+        border: 8px solid white;
+        border-radius: 8px;
+      }
+
+      /* Focus visible global */
+      :focus-visible {
+        outline: 2px solid var(--accent-royal);
+        outline-offset: 2px;
       }
     </style>
   </head>
+
   <body class="min-h-screen antialiased">
-    
-    <!-- Navbar Flotante Glassmorphism -->
+
+    <!-- =============================================
+         NAVBAR GLASSMORPHISM
+    ============================================== -->
     <nav class="glass-nav fixed top-0 left-0 right-0 z-50 transition-all duration-300" id="navbar">
-      <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+
         <!-- Logo -->
-        <div class="flex items-center gap-2">
-          <i data-lucide="grid" class="w-6 h-6 text-[var(--accent-navy)]" />
-          <span class="text-sm font-medium tracking-wider text-[var(--accent-navy)]">AR | Azul Ruiz</span>
-        </div>
+        <a href="#inicio" class="flex items-center gap-2 focus-visible:rounded" aria-label="Inicio">
+          <i data-lucide="grid-2x2" class="w-5 h-5 text-[var(--accent-navy)] flex-shrink-0"></i>
+          <span class="logo-text text-sm font-semibold text-[var(--accent-navy)]">AR | Azul Ruiz</span>
+        </a>
 
-        <!-- Enlaces de navegación -->
-        <div class="hidden md:flex items-center gap-8">
-          <a href="#about" class="text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors text-sm font-medium">Sobre Mí</a>
+        <!-- Desktop nav -->
+        <div class="hidden md:flex items-center gap-6">
+          <a href="#about"     class="text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors text-sm font-medium">Sobre Mí</a>
           <a href="#experience" class="text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors text-sm font-medium">Experiencia</a>
-          <a href="#simulator" class="text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors text-sm font-medium">Simulador Excel</a>
-          <a href="#catalogo" class="text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors text-sm font-medium">Catálogo</a>
+          <a href="#simulator" class="text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors text-sm font-medium">Simulador</a>
+          <a href="#catalogo"  class="text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors text-sm font-medium">Catálogo</a>
           <a href="#education" class="text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors text-sm font-medium">Educación</a>
-          <a href="#contacto" class="text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors text-sm font-medium">Contacto</a>
+          <a href="#contacto"  class="text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors text-sm font-medium">Contacto</a>
         </div>
 
-        <!-- Toggle Dark/Light Mode y CTA -->
-        <div class="flex items-center gap-3">
+        <!-- Acciones derecha -->
+        <div class="flex items-center gap-2">
+          <!-- Tema -->
           <button id="theme-toggle" class="p-2 rounded-lg hover:bg-[var(--border-light)] transition-colors" aria-label="Cambiar modo oscuro/claro">
-            <i data-lucide="sun" class="w-5 h-5 text-[var(--accent-emerald)]" id="sun-icon" />
-            <i data-lucide="moon" class="w-5 h-5 text-[var(--accent-emerald)] hidden" id="moon-icon" />
+            <i data-lucide="sun"  class="w-4 h-4 text-[var(--accent-emerald)]" id="sun-icon"></i>
+            <i data-lucide="moon" class="w-4 h-4 text-[var(--accent-emerald)] hidden" id="moon-icon"></i>
           </button>
-          <!-- Nueva: Tarjeta QR / vCard -->
-          <button id="qr-btn" class="p-2 rounded-lg hover:bg-[var(--border-light)] transition-colors relative" aria-label="Tarjeta QR y contacto">
-            <i data-lucide="zap" class="w-5 h-5 text-[var(--accent-royal)]" />
+
+          <!-- QR / vCard -->
+          <button id="qr-btn" class="p-2 rounded-lg hover:bg-[var(--border-light)] transition-colors" aria-label="Tarjeta QR y contacto" aria-haspopup="dialog">
+            <i data-lucide="qr-code" class="w-4 h-4 text-[var(--accent-royal)]"></i>
           </button>
-          <a href="mailto:azulmartinaruizf@gmail.com" class="btn-cta text-sm font-medium">
-            <i data-lucide="mail" class="w-4 h-4 mr-1" />
+
+          <!-- Contactar (oculto en 360px si falta espacio) -->
+          <a href="mailto:azulmartinaruizf@gmail.com" class="btn-cta text-xs hidden sm:inline-flex">
+            <i data-lucide="mail" class="w-3 h-3"></i>
             Contactar
           </a>
+
+          <!-- Hamburguesa móvil -->
+          <button
+            id="menu-btn"
+            class="md:hidden p-2 rounded-lg hover:bg-[var(--border-light)] transition-colors"
+            aria-label="Abrir menú"
+            aria-expanded="false"
+            aria-controls="mobile-menu"
+          >
+            <i data-lucide="menu" class="w-5 h-5 text-[var(--text-primary)]"></i>
+          </button>
         </div>
       </div>
 
-      <!-- Menú móvil -->
-      <div class="md:hidden hidden border-t border-[var(--border-light)] mt-8">
-        <a href="#about" class="block padding px-6 hover:bg-[var(--bg-card)] text-[var(--text-primary)]">Sobre Mí</a>
-        <a href="#experience" class="block padding px-6 hover:bg-[var(--bg-card)] text-[var(--text-primary)]">Experiencia</a>
-        <a href="#simulator" class="block padding px-6 hover:bg-[var(--bg-card)] text-[var(--text-primary)]">Simulador Excel</a>
-        <a href="#catalogo" class="block padding px-6 hover:bg-[var(--bg-card)] text-[var(--text-primary)]">Catálogo</a>
-        <a href="#education" class="block padding px-6 hover:bg-[var(--bg-card)] text-[var(--text-primary)]">Educación</a>
-        <a href="#contacto" class="block padding px-6 hover:bg-[var(--bg-card)] text-[var(--text-primary)]">Contacto</a>
+      <!-- Menú móvil desplegable -->
+      <div id="mobile-menu" role="navigation" aria-label="Menú móvil">
+        <div class="max-w-7xl mx-auto px-4 pb-4 flex flex-col gap-1">
+          <a href="#about"      class="block py-2.5 px-3 rounded-lg text-[var(--text-primary)] hover:bg-[var(--border-light)] text-sm font-medium transition-colors">Sobre Mí</a>
+          <a href="#experience" class="block py-2.5 px-3 rounded-lg text-[var(--text-primary)] hover:bg-[var(--border-light)] text-sm font-medium transition-colors">Experiencia</a>
+          <a href="#simulator"  class="block py-2.5 px-3 rounded-lg text-[var(--text-primary)] hover:bg-[var(--border-light)] text-sm font-medium transition-colors">Simulador</a>
+          <a href="#catalogo"   class="block py-2.5 px-3 rounded-lg text-[var(--text-primary)] hover:bg-[var(--border-light)] text-sm font-medium transition-colors">Catálogo</a>
+          <a href="#education"  class="block py-2.5 px-3 rounded-lg text-[var(--text-primary)] hover:bg-[var(--border-light)] text-sm font-medium transition-colors">Educación</a>
+          <a href="#contacto"   class="block py-2.5 px-3 rounded-lg text-[var(--text-primary)] hover:bg-[var(--border-light)] text-sm font-medium transition-colors">Contacto</a>
+          <a href="mailto:azulmartinaruizf@gmail.com" class="block py-2.5 px-3 rounded-lg text-[var(--accent-royal)] hover:bg-[var(--border-light)] text-sm font-medium transition-colors">✉ Contactar</a>
+        </div>
       </div>
     </nav>
 
-    <!-- Modal Tarjeta QR -->
-    <div id="qr-modal" class="modal-overlay" role="dialog" aria-modal="true">
+    <!-- =============================================
+         MODAL TARJETA QR
+    ============================================== -->
+    <div id="qr-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="qr-modal-title">
       <div class="modal-content">
-        <button class="modal-close" aria-label="Cerrar modal" role="button">
-          <i data-lucide="x" class="w-4 h-4" />
+        <button class="modal-close" aria-label="Cerrar modal">
+          <i data-lucide="x" class="w-4 h-4"></i>
         </button>
-        <div class="qr-modal-content">
-          <img src="assets/foto-azul.jpg" alt="Foto de perfil Azul Ruiz" class="qr-photo rounded-2xl mb-8" />
-          <div class="qr-info text-center">
-            <h3 class="font-bold text-[var(--text-primary)] mb-2">Azul Ruiz</h3>
-            <p class="text-[var(--text-secondary)] mb-4">Estudiante de Contador Público (UNC)</p>
-            <a href="https://www.linkedin.com/in/azul-ruiz" target="_blank" class="qr-qrlink text-[var(--accent-royal)] hover:text-[var(--accent-navy)] transition-colors mb-4">
-              <i data-lucide="linkedin" class="w-4 h-4 mr-2" />
-              linkedin.com/in/azul-ruiz
-            </a>
-            <button id="download-vcf-btn" class="btn-outline-emerald w-auto px-4 py-2 mt-6">
-              <i data-lucide="file-text" class="w-4 h-4 mr-1" />
-              Agendar Contacto (.vcf)
-            </button>
+        <div class="qr-modal-inner">
+          <img
+            src="assets/foto-azul.jpg"
+            alt="Foto de perfil de Azul Ruiz"
+            loading="lazy"
+            onerror="this.style.display='none'"
+          />
+          <div class="text-center">
+            <h3 id="qr-modal-title" class="text-lg font-bold text-[var(--text-primary)] mb-1">Azul Ruiz</h3>
+            <p class="text-sm text-[var(--text-secondary)] mb-3">Estudiante de Contador Público (UNC)</p>
           </div>
+          <!-- El QR se genera aquí por JS -->
+          <div id="qr-code"></div>
+          <a href="https://www.linkedin.com/in/azul-ruiz" target="_blank" rel="noopener" class="text-sm text-[var(--accent-royal)] hover:underline flex items-center gap-1">
+            <i data-lucide="linkedin" class="w-4 h-4"></i>
+            linkedin.com/in/azul-ruiz
+          </a>
+          <button id="download-vcf-btn" class="mt-2 flex items-center gap-2 px-4 py-2 rounded-lg border border-[var(--accent-emerald)] text-[var(--accent-emerald)] text-sm font-medium hover:bg-emerald-50 transition-colors">
+            <i data-lucide="contact" class="w-4 h-4"></i>
+            Agendar contacto (.vcf)
+          </button>
         </div>
       </div>
     </div>
 
-    <!-- Hero Section -->
-    <section class="min-h-screen relative flex items-center justify-center px-6 py-20 md:py-32">
+    <!-- =============================================
+         HERO SECTION
+    ============================================== -->
+    <section id="inicio" class="min-h-screen flex items-center justify-center px-4 sm:px-6 pt-24 pb-16">
       <div class="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+
         <!-- Columna izquierda -->
         <div>
           <!-- Badge OpenToWork -->
-          <div class="flex items-center gap-2 mb-6">
-            <span class="px-3 py-1 rounded-full text-xs font-medium bg-[var(--accent-emerald)] text-white animate-pulse-badge">#OpenToWork</span>
+          <div class="flex items-center gap-3 mb-6 flex-wrap">
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500 text-white animate-pulse">
+              <i data-lucide="circle-dot" class="w-3 h-3"></i>
+              #OpenToWork
+            </span>
             <span class="text-sm text-[var(--text-secondary)]">Disponible para primer empleo o pasantía</span>
           </div>
 
-          <!-- Título principal -->
-          <h1 class="text-5xl md:text-7xl lg:text-8xl font-bold leading-tight tracking-tight mb-4">
-            Azul Ruiz
-          </h1>
+          <!-- Título -->
+          <h1 class="hero-title-text mb-4 text-[var(--text-primary)]">Azul Ruiz</h1>
 
           <!-- Subtítulo -->
-          <p class="text-xl md:text-2xl text-[var(--text-secondary)] max-w-lg mb-8 line-height-relax">
-            Estudiante de Contador Público (UNC) | Excel · Control de cobros · Administración
+          <p class="text-lg md:text-xl text-[var(--text-secondary)] max-w-lg mb-8 leading-relaxed">
+            Estudiante de Contador Público (UNC) · Excel · Control de cobros · Administración
           </p>
 
-          <!-- Chips de cargos buscados -->
-          <div class="flex flex-wrap gap-3 mb-10">
-            <span class="chip-tag px-3 py-1.5 rounded-full text-xs font-medium bg-[var(--border-light)] text-[var(--text-primary)]">
-              Administrativo
-            </span>
-            <span class="chip-tag px-3 py-1.5 rounded-full text-xs font-medium bg-[var(--border-light)] text-[var(--text-primary)]">
-              Asistente Contable
-            </span>
-            <span class="chip-tag px-3 py-1.5 rounded-full text-xs font-medium bg-[var(--border-light)] text-[var(--text-primary)]">
-              Auxiliar Administrativo
-            </span>
-            <span class="chip-tag px-3 py-1.5 rounded-full text-xs font-medium bg-[var(--border-light)] text-[var(--text-primary)]">
-              Pasante
-            </span>
-            <span class="chip-tag px-3 py-1.5 rounded-full text-xs font-medium bg-[var(--border-light)] text-[var(--text-primary)]">
-              Recepcionista
-            </span>
+          <!-- Chips de cargos -->
+          <div class="flex flex-wrap gap-2 mb-10">
+            <span class="px-3 py-1.5 rounded-full text-xs font-medium bg-[var(--border-light)] text-[var(--text-primary)]">Administrativo</span>
+            <span class="px-3 py-1.5 rounded-full text-xs font-medium bg-[var(--border-light)] text-[var(--text-primary)]">Asistente Contable</span>
+            <span class="px-3 py-1.5 rounded-full text-xs font-medium bg-[var(--border-light)] text-[var(--text-primary)]">Auxiliar Administrativo</span>
+            <span class="px-3 py-1.5 rounded-full text-xs font-medium bg-[var(--border-light)] text-[var(--text-primary)]">Pasante</span>
+            <span class="px-3 py-1.5 rounded-full text-xs font-medium bg-[var(--border-light)] text-[var(--text-primary)]">Recepcionista</span>
           </div>
 
           <!-- Botones de acción -->
-          <div class="flex flex-wrap gap-4 mb-8">
-            <a href="#catalogo" class="btn-action px-6 py-3 rounded-full text-sm font-medium bg-[var(--accent-royal)] text-white hover:bg-[var(--accent-navy)] transition-colors">
-              <i data-lucide="grid" class="w-4 h-4 mr-2" />
-              Ver Catálogo y Gestión
+          <div class="flex flex-wrap gap-3 mb-6">
+            <a href="#catalogo" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium bg-[var(--accent-royal)] text-white hover:bg-[var(--accent-navy)] transition-colors">
+              <i data-lucide="grid-2x2" class="w-4 h-4"></i>
+              Ver Catálogo
             </a>
-            <a href="https://www.linkedin.com/in/azul-ruiz" target="_blank" class="btn-action-outline px-6 py-3 rounded-full text-sm font-medium border border-[var(--border-light)] hover:border-[var(--accent-royal)] hover:text-[var(--accent-royal)] transition-colors">
-              <i data-lucide="linkedin" class="w-4 h-4 mr-2" />
+            <a href="https://www.linkedin.com/in/azul-ruiz" target="_blank" rel="noopener" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium border border-[var(--border-light)] text-[var(--text-primary)] hover:border-[var(--accent-royal)] hover:text-[var(--accent-royal)] transition-colors">
+              <i data-lucide="linkedin" class="w-4 h-4"></i>
               LinkedIn
             </a>
-            <a href="tel:+5493512062487" class="btn-action-outline px-6 py-3 rounded-full text-sm font-medium border border-[var(--border-light)] hover:border-[var(--accent-emerald)] hover:text-[var(--accent-emerald)] transition-colors">
-              <i data-lucide="phone" class="w-4 h-4 mr-2" />
+            <a href="tel:+5493512062487" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium border border-[var(--border-light)] text-[var(--text-primary)] hover:border-emerald-500 hover:text-emerald-600 transition-colors">
+              <i data-lucide="phone" class="w-4 h-4"></i>
               WhatsApp
             </a>
           </div>
 
-          <!-- Menú desplegable Descargar CV -->
-          <div class="group">
-            <button id="cv-dropdown-btn" class="flex items-center gap-2 px-6 py-3 rounded-full text-sm font-medium bg-white border border-[var(--border-light)] hover:border-transparent bg-opacity-90 transition-all dropdown-toggle">
-              <i data-lucide="file-text" class="w-4 h-4" />
+          <!-- Descargar CV -->
+          <div class="relative inline-block">
+            <button id="cv-dropdown-btn" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium bg-[var(--bg-card)] border border-[var(--border-light)] hover:border-[var(--accent-royal)] transition-all">
+              <i data-lucide="file-text" class="w-4 h-4"></i>
               Descargar CV
-              <i data-lucide="chevron-down" class="w-3 h-3 transition-transform" />
+              <i data-lucide="chevron-down" class="w-3 h-3"></i>
             </button>
-            <div id="cv-dropdown" class="absolute right-0 mt-2 w-48 rounded-lg shadow-lg bg-[var(--bg-card)] border border-[var(--border-light)] hidden min-w-[160px] z-10">
-              <div class="p-4 text-sm text-[var(--text-secondary)]">
-                <a href="assets/CV_Azul_Ruiz_Virtual.pdf" target="_blank" class="block text-[var(--text-primary)] hover:text-[var(--accent-royal)] mb-2 flex items-center gap-2">
-                  <i data-lucide="file-text" class="w-4 h-4" />
-                  Versión Virtual / ATS
-                </a>
-                <a href="assets/CV_Azul_Ruiz_Impresion.pdf" download="CV_Azul_Ruiz_Impresion.pdf" class="block text-[var(--text-primary)] hover:text-[var(--accent-emerald)] mb-2 flex items-center gap-2">
-                  <i data-lucide="file" class="w-4 h-4" />
-                  Versión Impresión / Diseño
-                </a>
-                <p class="text-[var(--muted)] text-xs mt-3">Haz clic para descargar</p>
-              </div>
+            <div id="cv-dropdown" class="absolute left-0 mt-2 w-52 rounded-xl shadow-xl bg-[var(--bg-card)] border border-[var(--border-light)] hidden z-10 p-2">
+              <a href="assets/CV_Azul_Ruiz_Virtual.pdf" target="_blank" class="flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-[var(--text-primary)] hover:bg-[var(--border-light)] transition-colors">
+                <i data-lucide="file-text" class="w-4 h-4 text-[var(--accent-royal)]"></i>
+                Versión Virtual / ATS
+              </a>
+              <a href="assets/CV_Azul_Ruiz_Impresion.pdf" download="CV_Azul_Ruiz_Impresion.pdf" class="flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-[var(--text-primary)] hover:bg-[var(--border-light)] transition-colors">
+                <i data-lucide="file" class="w-4 h-4 text-emerald-500"></i>
+                Versión Impresión / Diseño
+              </a>
             </div>
           </div>
         </div>
 
-        <!-- Columna derecha - Foto con marco editorial -->
+        <!-- Columna derecha — Foto editorial -->
         <div class="relative">
-          <img 
-            src="assets/foto-azul.jpg" 
-            alt="Foto de perfil de Azul Ruiz - estudiante de Contador Público" 
-            class="relative w-full h-auto rounded-2xl aspect-[4/5] object-cover shadow-2xl transition-shadow"
+          <img
+            src="assets/foto-azul.jpg"
+            alt="Foto de Azul Ruiz – estudiante de Contador Público en Córdoba"
+            class="hero-photo shadow-2xl"
+            width="480" height="600"
+            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
           />
-          <!-- Overlay con información -->
-          <div class="absolute -bottom-4 -left-4 flex items-center gap-3 bg-[var(--bg-card)] border border-[var(--border-light)] rounded-xl p-4 shadow-xl dark-mode:dark-mode:bg-[var(--bg-dark-dark)] dark-mode:dark-mode:border-[var(--border-dark)]">
-            <div class="flex items-center gap-2">
-              <i data-lucide="map-pin" class="w-4 h-4 text-[var(--accent-emerald)]" />
-              <span class="text-sm text-[var(--text-secondary)]">Córdoba Capital</span>
-            </div>
-            <div class="flex items-center gap-2">
-              <i data-lucide="calendar" class="w-4 h-4 text-[var(--accent-emerald)]" />
-              <span class="text-sm text-[var(--text-secondary)]">Presencial / Remoto</span>
-            </div>
+          <div class="hero-photo-fallback" aria-hidden="true">AR</div>
+
+          <!-- Overlay info -->
+          <div class="absolute -bottom-4 -left-4 flex flex-wrap items-center gap-3 bg-[var(--bg-card)] border border-[var(--border-light)] rounded-xl p-3 shadow-xl max-w-[90%]">
+            <span class="flex items-center gap-1.5 text-sm text-[var(--text-secondary)]">
+              <i data-lucide="map-pin" class="w-4 h-4 text-emerald-500"></i>
+              Córdoba Capital
+            </span>
+            <span class="flex items-center gap-1.5 text-sm text-[var(--text-secondary)]">
+              <i data-lucide="calendar" class="w-4 h-4 text-emerald-500"></i>
+              Presencial / Remoto
+            </span>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Sección Propuesta de Valor y Perfil (Bento Grid) -->
-    <section id="propuesta" class="py-24 px-6 max-w-7xl mx-auto">
+    <!-- =============================================
+         SECCIÓN SOBRE MÍ / PROPUESTA DE VALOR
+    ============================================== -->
+    <section id="about" class="py-24 px-4 sm:px-6">
       <div class="max-w-7xl mx-auto">
         <h2 class="text-3xl md:text-4xl font-bold text-[var(--text-primary)] mb-12 text-center reveal">
           Mis Pilares Fundamentales
         </h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 reveal" style="transition-delay: 0.1s;">
-          <!-- Tarjeta Precisión con los Números -->
-          <div class="bento-card p-6 rounded-2xl border border-[var(--border-light)] bg-[var(--bg-card)] reveal" style="transition-delay: 0.1s;">
-            <div class="w-12 h-12 rounded-xl bg-[var(--border-light)] flex items-center justify-center mb-4">
-              <i data-lucide="matrix" class="w-6 h-6 text-[var(--accent-emerald)]" />
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <!-- Precisión con los Números -->
+          <div class="bento-card p-6 rounded-2xl border border-[var(--border-light)] bg-[var(--bg-card)] reveal">
+            <div class="w-11 h-11 rounded-xl bg-emerald-50 flex items-center justify-center mb-4">
+              <i data-lucide="calculator" class="w-5 h-5 text-emerald-600"></i>
             </div>
-            <h3 class="text-xl font-semibold text-[var(--text-primary)] mb-2">Precisión con los Números</h3>
+            <h3 class="text-base font-semibold text-[var(--text-primary)] mb-2">Precisión con los Números</h3>
             <p class="text-[var(--text-secondary)] text-sm leading-relaxed">
-              Dominio del cálculo numérico aplicado a control de cobros, liquidaciones y conciliación de estados financieros con prolijidad analítica.
+              Dominio del cálculo numérico aplicado al control de cobros, cruce de aranceles y verificación de liquidaciones con prolijidad analítica.
             </p>
           </div>
 
-          <!-- Tarjeta Gestión en Excel -->
-          <div class="bento-card p-6 rounded-2xl border border-[var(--border-light)] bg-[var(--bg-card)] reveal" style="transition-delay: 0.2s;">
-            <div class="w-12 h-12 rounded-xl bg-[var(--border-light)] flex items-center justify-center mb-4">
-              <i data-lucide="zap" class="w-6 h-6 text-[var(--accent-royal)]" />
+          <!-- Gestión en Excel -->
+          <div class="bento-card p-6 rounded-2xl border border-[var(--border-light)] bg-[var(--bg-card)] reveal" style="transition-delay:0.1s">
+            <div class="w-11 h-11 rounded-xl bg-blue-50 flex items-center justify-center mb-4">
+              <i data-lucide="table-2" class="w-5 h-5 text-[var(--accent-royal)]"></i>
             </div>
-            <h3 class="text-xl font-semibold text-[var(--text-primary)] mb-2">Gestión en Excel</h3>
+            <h3 class="text-base font-semibold text-[var(--text-primary)] mb-2">Gestión en Excel</h3>
             <p class="text-[var(--text-secondary)] text-sm leading-relaxed">
-              Experiencia práctica en creación de planillas de control, fórmulas avanzadas y automatización de reportes para obras sociales y prepagas.
+              Creación de planillas de control, fórmulas avanzadas y reportes automáticos para obras sociales y prepagas (APROSS, Nobis y otras).
             </p>
           </div>
 
-          <!-- Tarjeta Comunicación y Negociación -->
-          <div class="bento-card p-6 rounded-2xl border border-[var(--border-light)] bg-[var(--bg-card)] reveal" style="transition-delay: 0.3s;">
-            <div class="w-12 h-12 rounded-xl bg-[var(--border-light)] flex items-center justify-center mb-4">
-              <i data-lucide="message-circle" class="w-6 h-6 text-[var(--accent-navy)]" />
+          <!-- Comunicación y Negociación -->
+          <div class="bento-card p-6 rounded-2xl border border-[var(--border-light)] bg-[var(--bg-card)] reveal" style="transition-delay:0.2s">
+            <div class="w-11 h-11 rounded-xl bg-purple-50 flex items-center justify-center mb-4">
+              <i data-lucide="message-circle" class="w-5 h-5 text-purple-600"></i>
             </div>
-            <h3 class="text-xl font-semibold text-[var(--text-primary)] mb-2">Comunicación y Negociación</h3>
+            <h3 class="text-base font-semibold text-[var(--text-primary)] mb-2">Comunicación y Negociación</h3>
             <p class="text-[var(--text-secondary)] text-sm leading-relaxed">
-              Participación en modelo de Naciones Unidas, investigación de posturas oficiales y negociación de proyectos de resolución con otras delegaciones.
+              Oratoria y redacción formal desarrolladas en el Modelo de Naciones Unidas: investigación de posturas, discursos y proyectos de resolución.
             </p>
           </div>
 
-          <!-- Tarjeta Autonomía y Compromiso -->
-          <div class="bento-card p-6 rounded-2xl border border-[var(--border-light)] bg-[var(--bg-card)] reveal" style="transition-delay: 0.4s;">
-            <div class="w-12 h-12 rounded-xl bg-[var(--border-light)] flex items-center justify-center mb-4">
-              <i data-lucide="star" class="w-6 h-6 text-[var(--accent-emerald)]" />
+          <!-- Autonomía y Compromiso -->
+          <div class="bento-card p-6 rounded-2xl border border-[var(--border-light)] bg-[var(--bg-card)] reveal" style="transition-delay:0.3s">
+            <div class="w-11 h-11 rounded-xl bg-emerald-50 flex items-center justify-center mb-4">
+              <i data-lucide="star" class="w-5 h-5 text-emerald-600"></i>
             </div>
-            <h3 class="text-xl font-semibold text-[var(--text-primary)] mb-2">Autonomía y Compromiso</h3>
+            <h3 class="text-base font-semibold text-[var(--text-primary)] mb-2">Autonomía y Compromiso</h3>
             <p class="text-[var(--text-secondary)] text-sm leading-relaxed">
-              Trabajo autónomo sostenido, adaptación horaria al cursado universitario y compromiso constante con la excelencia en cada tarea administrativa.
+              Trabajo autónomo sostenido, adaptación horaria al cursado universitario y compromiso constante con cada tarea administrativa.
             </p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Sección Experiencia + Flujo de Trabajo Interactivo -->
-    <section id="experience" class="py-24 px-6 bg-[var(--bg-primary)] reveal">
+    <!-- =============================================
+         SECCIÓN EXPERIENCIA
+    ============================================== -->
+    <section id="experience" class="py-24 px-4 sm:px-6 bg-[var(--bg-primary)]">
       <div class="max-w-7xl mx-auto">
-        <!-- Flecha direccional -->
-        <div class="flex items-center gap-4 mb-12 reveal">
-          <i data-lucide="chevron-down" class="w-8 h-8 text-[var(--accent-emerald)]" />
-          <span class="text-lg font-medium text-[var(--text-secondary)]">
-            Trayectoria Profesional
-          </span>
+
+        <div class="flex items-center gap-3 mb-6 reveal">
+          <i data-lucide="chevron-down" class="w-7 h-7 text-emerald-500"></i>
+          <span class="text-base font-medium text-[var(--text-secondary)]">Trayectoria Profesional</span>
         </div>
 
-        <!-- Subtítulo -->
-        <p class="text-[var(--text-secondary)] text-lg mb-16 max-w-2xl reveal" style="transition-delay: 0.1s;">
-          Como Asistente Administrativa en Consultorio Médico (Familiar) desde octubre de 2025, he desarrollado competencias clave en gestión administrativa y control de cobros, integrando herramientas tecnológicas para optimizar procesos financieros del consultorio.
+        <p class="text-[var(--text-secondary)] text-lg mb-16 max-w-2xl reveal" style="transition-delay:0.1s">
+          Como Asistente Administrativa en Consultorio Médico (Familiar) desde octubre de 2025, desarrollo competencias en gestión administrativa y control de cobros, integrando Excel para optimizar el seguimiento de obras sociales y prepagas.
         </p>
 
-        <!-- Responsabilidades -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl reveal" style="transition-delay: 0.2s;">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-10 reveal" style="transition-delay:0.2s">
+          <!-- Responsabilidades -->
           <div>
-            <h3 class="text-2xl font-bold text-[var(--text-primary)] mb-4">Responsabilidades Clave</h3>
-            <ul class="space-y-3 text-[var(--text-secondary)]">
-              <li class="pb-2 border-b border-[var(--border-light)] last:pb-0">
-                <span class="font-medium text-[var(--text-primary)]">Cálculo en Excel:</span> reviso la planilla de turnos del consultorio e identifico los pacientes efectivamente atendidos.
+            <h3 class="text-xl font-bold text-[var(--text-primary)] mb-5">Responsabilidades Clave</h3>
+            <ul class="space-y-4 text-[var(--text-secondary)] text-sm">
+              <li class="pb-3 border-b border-[var(--border-light)]">
+                <span class="font-semibold text-[var(--text-primary)]">Revisión de planilla de turnos:</span>
+                identifico los pacientes efectivamente atendidos en el consultorio.
               </li>
-              <li class="pb-2 border-b border-[var(--border-light)] last:pb-0">
-                <span class="font-medium text-[var(--text-primary)]">Organización de planillas:</span> control de cobros y trabajo autónomo sostenido.
+              <li class="pb-3 border-b border-[var(--border-light)]">
+                <span class="font-semibold text-[var(--text-primary)]">Registro en Excel:</span>
+                cuántos pacientes se atendieron de cada obra social y prepaga (APROSS, Nobis y otras), por día y por mes.
               </li>
-              <li class="pb-2 border-b border-[var(--border-light)] last:pb-0">
-                <span class="font-medium text-[var(--text-primary)]">Generación de reportes:</span> entregables claros y depurados para el profesional médico.
+              <li class="pb-3 border-b border-[var(--border-light)]">
+                <span class="font-semibold text-[var(--text-primary)]">Verificación de cobros:</span>
+                controlo que los pagos informados en la liquidación en PDF de cada entidad sean correctos, considerando que cada una paga un arancel distinto.
               </li>
-              <li class="pb-2 border-b border-[var(--border-light)] last:pb-0">
-                <span class="font-medium text-[var(--text-primary)]">Control de estados:</span> seguimiento de Prestaciones (Pendiente, Liquidado, Listo para Facturar).
+              <li class="pb-3">
+                <span class="font-semibold text-[var(--text-primary)]">Control continuo:</span>
+                realizo este proceso de forma constante desde octubre de 2025 (hace más de un año).
               </li>
             </ul>
           </div>
 
           <!-- Flujo de 4 Etapas -->
           <div>
-            <h3 class="text-2xl font-bold text-[var(--text-primary)] mb-4">Flujo de Proceso Administrativo en 4 Etapas</h3>
-            <div class="space-y-4">
+            <h3 class="text-xl font-bold text-[var(--text-primary)] mb-5">Flujo de Proceso en 4 Etapas</h3>
+            <div class="space-y-3">
               <div class="p-4 rounded-xl bg-[var(--bg-card)] border border-[var(--border-light)] reveal">
-                <h4 class="font-semibold text-[var(--text-primary)] mb-1">1. Planilla de Turnos</h4>
-                <p class="text-[var(--text-secondary)] text-sm">Revisión de turnos e identificación de los pacientes efectivamente atendidos.</p>
+                <h4 class="text-sm font-semibold text-[var(--text-primary)] mb-1">1. Planilla de Turnos</h4>
+                <p class="text-[var(--text-secondary)] text-xs leading-relaxed">Revisión de turnos e identificación de los pacientes efectivamente atendidos.</p>
               </div>
-              <div class="p-4 rounded-xl bg-[var(--bg-card)] border border-[var(--border-light)] reveal" style="transition-delay: 0.1s;">
-                <h4 class="font-semibold text-[var(--text-primary)] mb-1">2. Registro Diario y Mensual (Excel)</h4>
-                <p class="text-[var(--text-secondary)] text-sm">Conteo y organización en Excel de pacientes atendidos por día y por mes según obra social y prepaga (APROSS, Nobis y otras).</p>
+              <div class="p-4 rounded-xl bg-[var(--bg-card)] border border-[var(--border-light)] reveal" style="transition-delay:0.1s">
+                <h4 class="text-sm font-semibold text-[var(--text-primary)] mb-1">2. Registro Diario y Mensual (Excel)</h4>
+                <p class="text-[var(--text-secondary)] text-xs leading-relaxed">Conteo y organización en Excel de pacientes atendidos por día y mes según obra social y prepaga.</p>
               </div>
-              <div class="p-4 rounded-xl bg-[var(--bg-card)] border border-[var(--border-light)] reveal" style="transition-delay: 0.2s;">
-                <h4 class="font-semibold text-[var(--text-primary)] mb-1">3. Recepción de Liquidación en PDF</h4>
-                <p class="text-[var(--text-secondary)] text-sm">Lectura de los reportes de pago enviados por cada entidad.</p>
+              <div class="p-4 rounded-xl bg-[var(--bg-card)] border border-[var(--border-light)] reveal" style="transition-delay:0.2s">
+                <h4 class="text-sm font-semibold text-[var(--text-primary)] mb-1">3. Recepción de Liquidación en PDF</h4>
+                <p class="text-[var(--text-secondary)] text-xs leading-relaxed">Lectura de los reportes de pago enviados por cada entidad (APROSS, Nobis, etc.).</p>
               </div>
-              <div class="p-4 rounded-xl bg-[var(--bg-card)] border border-[var(--border-light)] reveal" style="transition-delay: 0.3s;">
-                <h4 class="font-semibold text-[var(--text-primary)] mb-1">4. Verificación de Cobros y Aranceles</h4>
-                <p class="text-[var(--text-secondary)] text-sm">Control de que los importes informados en el PDF sean correctos, considerando que cada obra social y prepaga paga un valor distinto.</p>
+              <div class="p-4 rounded-xl bg-[var(--bg-card)] border border-[var(--border-light)] reveal" style="transition-delay:0.3s">
+                <h4 class="text-sm font-semibold text-[var(--text-primary)] mb-1">4. Verificación de Cobros y Aranceles</h4>
+                <p class="text-[var(--text-secondary)] text-xs leading-relaxed">Control de que los importes informados en el PDF sean correctos, considerando el arancel distinto de cada entidad.</p>
               </div>
             </div>
           </div>
@@ -459,211 +576,173 @@
       </div>
     </section>
 
-    <!-- Componente Estrella: Vista Previa Interactiva de Planilla de Control (DEMO) -->
-    <section id="simulator" class="py-24 px-6 bg-[var(--bg-primary)] reveal">
+    <!-- =============================================
+         SIMULADOR INTERACTIVO (DEMO)
+    ============================================== -->
+    <section id="simulator" class="py-24 px-4 sm:px-6">
       <div class="max-w-7xl mx-auto">
-        <div class="mb-12 reveal">
-          <h2 class="text-3xl md:text-4xl font-bold text-[var(--text-primary)] mb-6">
-            Vista Previa Interactiva de Planilla de Control (Demo)
+
+        <div class="mb-10 reveal">
+          <h2 class="text-3xl md:text-4xl font-bold text-[var(--text-primary)] mb-4">
+            Vista Previa Interactiva de Planilla de Control
+            <span class="text-lg font-normal text-[var(--text-secondary)] ml-2">(Demo)</span>
           </h2>
-          <p class="text-[var(--text-secondary)] text-lg max-w-2xl">
-            Demostración interactiva con valores simulados que replica la estructura lógica de control de cobros utilizada en Excel. Filtrar por estado y ver cómo se recalculan los resúmenes automáticamente.
+          <p class="text-[var(--text-secondary)] text-base max-w-2xl leading-relaxed">
+            Replica la estructura lógica utilizada en Excel para verificar cobros entre la planilla de turnos y las liquidaciones en PDF.
+            Filtrá por estado y el resumen se recalcula automáticamente.
           </p>
         </div>
 
-        <!-- Filtros -->
-        <div class="mb-8 reveal" style="transition-delay: 0.1s;">
-          <div class="flex flex-wrap gap-2">
-            <button class="filter-chip px-4 py-2 rounded-full text-sm font-medium bg-[var(--bg-card)] border border-[var(--border-light)] text-[var(--text-primary)] selected" data-filter="all">Todos</button>
-            <button class="filter-chip px-4 py-2 rounded-full text-sm font-medium bg-[var(--bg-card)] border border-[var(--border-light)] text-[var(--text-primary)]" data-filter="listo">Listo para Facturar</button>
-            <button class="filter-chip px-4 py-2 rounded-full text-sm font-medium bg-[var(--bg-card)] border border-[var(--border-light)] text-[var(--text-primary)]" data-filter="en-control">En Control</button>
-            <button class="filter-chip px-4 py-2 rounded-full text-sm font-medium bg-[var(--bg-card)] border border-[var(--border-light)] text-[var(--text-primary)]" data-filter="liquidado">Liquidado</button>
-            <input type="text" id="search-input" class="px-4 py-2 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[var(--accent-royal)] transition-colors" placeholder="Buscar..." aria-label="Buscar en la tabla">
-          </div>
+        <!-- Nota simulador -->
+        <p class="nota-simulador reveal">
+          Demostración con valores simulados. No son datos reales.
+        </p>
+
+        <!-- Filtros + Buscador -->
+        <div class="flex flex-wrap gap-2 mb-6 items-center reveal" style="transition-delay:0.1s">
+          <button class="filter-chip px-4 py-1.5 rounded-full text-sm font-medium border border-[var(--border-light)] bg-[var(--bg-card)] text-[var(--text-primary)] selected" data-filter="all">Todos</button>
+          <button class="filter-chip px-4 py-1.5 rounded-full text-sm font-medium border border-[var(--border-light)] bg-[var(--bg-card)] text-[var(--text-primary)]" data-filter="correcto">Pago correcto</button>
+          <button class="filter-chip px-4 py-1.5 rounded-full text-sm font-medium border border-[var(--border-light)] bg-[var(--bg-card)] text-[var(--text-primary)]" data-filter="diferencia">Diferencia en PDF</button>
+          <button class="filter-chip px-4 py-1.5 rounded-full text-sm font-medium border border-[var(--border-light)] bg-[var(--bg-card)] text-[var(--text-primary)]" data-filter="verificacion">En verificación</button>
+          <input
+            type="search"
+            id="search-input"
+            class="ml-auto px-3 py-1.5 rounded-lg text-sm border border-[var(--border-light)] bg-[var(--bg-card)] text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-royal)] w-full sm:w-auto min-w-0"
+            placeholder="Buscar entidad…"
+            aria-label="Buscar en la tabla"
+          />
         </div>
 
-        <!-- Tabla de control de cobros -->
-        <div class="overflow-x-auto reveal" style="transition-delay: 0.2s;">
-          <table class="w-full min-w-[800px] border-collapse">
+        <!-- Tabla -->
+        <div class="overflow-x-auto rounded-xl border border-[var(--border-light)] reveal" style="transition-delay:0.2s">
+          <table class="w-full min-w-[720px] border-collapse" id="simulator">
             <thead>
               <tr class="bg-[var(--bg-card)] border-b border-[var(--border-light)]">
-                <th class="p-4 text-left text-xs font-medium text-[var(--text-secondary)] uppercase tracking-wider">Obra Social / Prepaga</th>
-                <th class="p-4 text-left text-xs font-medium text-[var(--text-secondary)] uppercase tracking-wider">Período (Mes / Día)</th>
-                <th class="p-4 text-left text-xs font-medium text-[var(--text-secondary)] uppercase tracking-wider">Pacientes Atendidos (Turnos)</th>
-                <th class="p-4 text-left text-xs font-medium text-[var(--text-secondary)] uppercase tracking-wider">Arancel Unitario (según entidad)</th>
-                <th class="p-4 text-left text-xs font-medium text-[var(--text-secondary)] uppercase tracking-wider">Total Esperado (Excel)</th>
-                <th class="p-4 text-left text-xs font-medium text-[var(--text-secondary)] uppercase tracking-wider">Total Informado (Liquidación PDF)</th>
-                <th class="p-4 text-left text-xs font-medium text-[var(--text-secondary)] uppercase tracking-wider">Estado de Control</th>
+                <th class="p-3 text-left text-xs font-semibold text-[var(--text-secondary)] uppercase tracking-wider">Obra Social / Prepaga</th>
+                <th class="p-3 text-left text-xs font-semibold text-[var(--text-secondary)] uppercase tracking-wider">Período</th>
+                <th class="p-3 text-right text-xs font-semibold text-[var(--text-secondary)] uppercase tracking-wider">Pacientes</th>
+                <th class="p-3 text-right text-xs font-semibold text-[var(--text-secondary)] uppercase tracking-wider">Arancel</th>
+                <th class="p-3 text-right text-xs font-semibold text-[var(--text-secondary)] uppercase tracking-wider">Total esperado</th>
+                <th class="p-3 text-right text-xs font-semibold text-[var(--text-secondary)] uppercase tracking-wider">Total PDF</th>
+                <th class="p-3 text-left text-xs font-semibold text-[var(--text-secondary)] uppercase tracking-wider">Estado</th>
               </tr>
             </thead>
             <tbody>
-              <!-- Filas de muestra - datos simulados/anonimizados -->
-              <tr class="border-b border-[var(--border-light)] hover:bg-[var(--bg-card)] transition-colors">
-                <td class="p-4 font-mono text-sm">PRAC-001</td>
-                <td class="p-4">APROSS</td>
-                <td class="p-4 font-mono text-sm">Ene 2024</td>
-                <td class="p-4 font-mono text-sm">$ 1.250</td>
-                <td class="p-4 font-mono text-sm">$ 56.250</td>
-                <td class="p-4 font-mono text-sm">$ 56.000</td>
-                <td class="p-4 bg-[var(--warning)]/10 text-[var(--warning)] rounded text-sm">⚠️ Diferencia en PDF</td>
-              </tr>
-              <tr class="border-b border-[var(--border-light)] hover:bg-[var(--bg-card)] transition-colors">
-                <td class="p-4 font-mono text-sm">PRAC-002</td>
-                <td class="p-4">Nobis Medical</td>
-                <td class="p-4 font-mono text-sm">Ene 2024</td>
-                <td class="p-4 font-mono text-sm">$ 980</td>
-                <td class="p-4 font-mono text-sm">$ 31.360</td>
-                <td class="p-4 font-mono text-sm">$ 31.360</td>
-                <td class="p-4 bg-[var(--success)]/10 text-[var(--success)] rounded text-sm">✅ Pago Correcto</td>
-              </tr>
-              <tr class="border-b border-[var(--border-light)] hover:bg-[var(--bg-card)] transition-colors">
-                <td class="p-4 font-mono text-sm">PRAC-003</td>
-                <td class="p-4">Obra Social Sindical</td>
-                <td class="p-4 font-mono text-sm">Ene 2024</td>
-                <td class="p-4 font-mono text-sm">$ 850</td>
-                <td class="p-4 font-mono text-sm">$ 56.950</td>
-                <td class="p-4 font-mono text-sm">$ 57.500</td>
-                <td class="p-4 bg-[var(--warning)]/10 text-[var(--warning)] rounded text-sm">𔁋 En Verificación</td>
-              </tr>
-              <tr class="border-b border-[var(--border-light)] hover:bg-[var(--bg-card)] transition-colors">
-                <td class="p-4 font-mono text-sm">PRAC-004</td>
-                <td class="p-4">Prepaga Nacional</td>
-                <td class="p-4 font-mono text-sm">Ene 2024</td>
-                <td class="p-4 font-mono text-sm">$ 1.250</td>
-                <td class="p-4 font-mono text-sm">$ 66.250</td>
-                <td class="p-4 font-mono text-sm">$ 66.500</td>
-                <td class="p-4 bg-[var(--warning)]/10 text-[var(--warning)] rounded text-sm">𔁋 En Verificación</td>
-              </tr>
-              <tr class="border-b border-[var(--border-light)] hover:bg-[var(--bg-card)] transition-colors">
-                <td class="p-4 font-mono text-sm">PRAC-005</td>
-                <td class="p-4">APROSS</td>
-                <td class="p-4 font-mono text-sm">Feb 2024</td>
-                <td class="p-4 font-mono text-sm">$ 1.250</td>
-                <td class="p-4 font-mono text-sm">$ 35.000</td>
-                <td class="p-4 font-mono text-sm">$ 35.000</td>
-                <td class="p-4 bg-[var(--success)]/10 text-[var(--success)] rounded text-sm">✅ Pago Correcto</td>
-              </tr>
+              <!-- Generado por JS -->
             </tbody>
           </table>
         </div>
 
-        <!-- Tarjetas de resumen superior -->
-        <div class="grid grid-cols-3 gap-6 mt-8 reveal" style="transition-delay: 0.3s;">
-          <div class="p-6 rounded-2xl bg-[var(--bg-card)] border border-[var(--border-light)] text-center">
-            <div class="text-3xl font-bold text-[var(--text-primary)]" id="total-calculado">$ 238.250</div>
-            <div class="text-[var(--text-secondary)] text-sm mt-1">Total Calculado del Período</div>
+        <!-- Tarjetas de resumen — calculadas por JS -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8 reveal" style="transition-delay:0.3s">
+          <div class="p-5 rounded-2xl bg-[var(--bg-card)] border border-[var(--border-light)] text-center">
+            <div class="text-2xl font-bold font-mono text-[var(--text-primary)]" id="total-esperado">—</div>
+            <div class="text-xs text-[var(--text-secondary)] mt-1">Total esperado (Excel)</div>
           </div>
-          <div class="p-6 rounded-2xl bg-[var(--bg-card)] border border-[var(--border-light)] text-center">
-            <div class="text-3xl font-bold text-[var(--text-primary)]" id="prestaciones-auditadas">125</div>
-            <div class="text-[var(--text-secondary)] text-sm mt-1">Cantidad de Prestaciones Auditadas</div>
+          <div class="p-5 rounded-2xl bg-[var(--bg-card)] border border-[var(--border-light)] text-center">
+            <div class="text-2xl font-bold font-mono text-[var(--text-primary)]" id="total-informado">—</div>
+            <div class="text-xs text-[var(--text-secondary)] mt-1">Total informado (PDF)</div>
           </div>
-          <div class="p-6 rounded-2xl bg-[var(--bg-card)] border border-[var(--border-light)] text-center">
-            <div class="text-3xl font-bold text-[var(--accent-emerald)]" id="porcentaje-control">100%</div>
-            <div class="text-[var(--text-secondary)] text-sm mt-1">% de Control Completado</div>
+          <div class="p-5 rounded-2xl bg-[var(--bg-card)] border border-[var(--border-light)] text-center">
+            <div class="text-2xl font-bold font-mono text-[var(--text-primary)]" id="total-diferencia">—</div>
+            <div class="text-xs text-[var(--text-secondary)] mt-1">Diferencia total</div>
+          </div>
+          <div class="p-5 rounded-2xl bg-[var(--bg-card)] border border-[var(--border-light)] text-center">
+            <div class="text-2xl font-bold font-mono text-emerald-600" id="pct-correcto">—</div>
+            <div class="text-xs text-[var(--text-secondary)] mt-1">Filas correctas</div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Sección Catálogo de Gestión, Recursos y Proyectos -->
-    <section id="catalogo" class="py-24 px-6 bg-[var(--bg-primary)] reveal">
+    <!-- =============================================
+         CATÁLOGO DE GESTIÓN, RECURSOS Y PROYECTOS
+    ============================================== -->
+    <section id="catalogo" class="py-24 px-4 sm:px-6 bg-[var(--bg-primary)]">
       <div class="max-w-7xl mx-auto">
-        <div class="mb-12 reveal">
-          <h2 class="text-3xl md:text-4xl font-bold text-[var(--text-primary)] mb-6">
+
+        <div class="mb-10 reveal">
+          <h2 class="text-3xl md:text-4xl font-bold text-[var(--text-primary)] mb-4">
             Catálogo de Gestión, Recursos y Proyectos
           </h2>
-          <p class="text-[var(--text-secondary)] text-lg">
-            Galería filtrable de mis proyectos, certificados y recursos de gestión. Filtra por categoría para explorar.
+          <p class="text-[var(--text-secondary)] text-base">
+            Galería filtrable de mis proyectos, participaciones y recursos. Filtrá por categoría para explorar.
           </p>
         </div>
 
-        <!-- Filtros -->
-        <div class="mb-8 flex flex-wrap gap-3 reveal" style="transition-delay: 0.1s;">
-          <button class="filter-chip px-4 py-2 rounded-full text-sm font-medium bg-[var(--bg-card)] border border-[var(--border-light)] text-[var(--text-primary)] selected" data-category="todos">Todos</button>
-          <button class="filter-chip px-4 py-2 rounded-full text-sm font-medium bg-[var(--bg-card)] border border-[var(--border-light)] text-[var(--text-primary)]" data-category="gestion-excel">Gestión y Excel</button>
-          <button class="filter-chip px-4 py-2 rounded-full text-sm font-medium bg-[var(--bg-card)] border border-[var(--border-light)] text-[var(--text-primary)]" data-category="academico-economico">Académico y Economía</button>
-          <button class="filter-chip px-4 py-2 rounded-full text-sm font-medium bg-[var(--bg-card)] border border-[var(--border-light)] text-[var(--text-primary)]" data-category="oratoria-liderazgo">Oratoria y Liderazgo</button>
+        <!-- Filtros catálogo -->
+        <div class="flex flex-wrap gap-2 mb-8 reveal" style="transition-delay:0.1s">
+          <button class="filter-chip px-4 py-1.5 rounded-full text-sm font-medium border border-[var(--border-light)] bg-[var(--bg-card)] text-[var(--text-primary)] selected" data-category="todos">Todos</button>
+          <button class="filter-chip px-4 py-1.5 rounded-full text-sm font-medium border border-[var(--border-light)] bg-[var(--bg-card)] text-[var(--text-primary)]" data-category="gestion-excel">Gestión y Excel</button>
+          <button class="filter-chip px-4 py-1.5 rounded-full text-sm font-medium border border-[var(--border-light)] bg-[var(--bg-card)] text-[var(--text-primary)]" data-category="academico-economico">Académico y Economía</button>
+          <button class="filter-chip px-4 py-1.5 rounded-full text-sm font-medium border border-[var(--border-light)] bg-[var(--bg-card)] text-[var(--text-primary)]" data-category="oratoria-liderazgo">Oratoria y Liderazgo</button>
         </div>
 
-        <!-- Galería -->
-        <div id="catalogo-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <!-- Los elementos se cargarán desde js/data.js -->
+        <!-- Grid — generado por JS -->
+        <div id="catalogo-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 reveal" style="transition-delay:0.2s">
+          <!-- Las tarjetas las inyecta app.js -->
         </div>
       </div>
     </section>
 
-    <!-- Sección Educación, Habilidades e Idiomas -->
-    <section id="education" class="py-24 px-6">
+    <!-- =============================================
+         EDUCACIÓN, HABILIDADES E IDIOMAS
+    ============================================== -->
+    <section id="education" class="py-24 px-4 sm:px-6">
       <div class="max-w-7xl mx-auto">
+
         <!-- Línea de tiempo académica -->
-        <div class="mb-24 reveal">
-          <h2 class="text-3xl md:text-4xl font-bold text-[var(--text-primary)] mb-12 text-center">Línea de Tiempo Académica</h2>
-          <div class="relative">
-            <!-- Puntos de la línea -->
-            <div class="absolute -top-1/2 -left-1/2 w-12 h-12 rounded-full bg-[var(--bg-card)] border border-[var(--border-light)] flex items-center justify-center" style="left: 50%; transform: translate(-50%, -50%);">
-              <i data-lucide=" GraduationCap" class="w-5 h-5 text-[var(--accent-royal)]" />
-            </div>
+        <div class="mb-20 reveal">
+          <h2 class="text-3xl md:text-4xl font-bold text-[var(--text-primary)] mb-12 text-center">Formación Académica</h2>
 
-            <!-- Universidad Nacional de Córdoba -->
-            <div class="relative pt-12">
-              <div class="flex justify-between items-start mb-4">
-                <h3 class="text-xl font-semibold text-[var(--text-primary)]">Universidad Nacional de Córdoba (UNC)</h3>
-                <span class="text-sm text-[var(--accent-royal)]">Ciencias Económicas</span>
+          <div class="relative grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- UNC -->
+            <div class="p-6 rounded-2xl bg-[var(--bg-card)] border border-[var(--border-light)]">
+              <div class="flex items-center gap-2 mb-1">
+                <i data-lucide="graduation-cap" class="w-5 h-5 text-[var(--accent-royal)]"></i>
+                <span class="text-xs font-medium text-[var(--accent-royal)] uppercase tracking-wider">Universidad</span>
               </div>
-              <p class="text-[var(--text-secondary)] text-sm">
-                Carrera de <strong class="font-medium">Contador Público</strong> · Ingreso anticipado 2026 · Cursado desde 2027
-              </p>
-              <p class="text-[var(--text-secondary)] text-xs">
-                Orientación en Economía y Gestión de las Organizaciones complementando la formación contable con conocimientos estratégicos de administración y organización.
-              </p>
+              <h3 class="text-lg font-semibold text-[var(--text-primary)] mb-1">Universidad Nacional de Córdoba (UNC)</h3>
+              <p class="text-sm text-[var(--text-secondary)] mb-1">Carrera de <strong class="font-medium">Contador Público</strong></p>
+              <p class="text-xs text-[var(--muted)]">Ingreso anticipado 2026 · Cursado desde 2027 · Facultad de Ciencias Económicas</p>
             </div>
 
-            <div class="absolute -top-1/2 -left-1/2 w-12 h-12 rounded-full bg-[var(--bg-card)] border border-[var(--border-light)] flex items-center justify-center" style="left: 75%; transform: translate(-50%, -50%);">
-              <i data-lucide=" GraduationCap" class="w-5 h-5 text-[var(--accent-royal)]" />
-            </div>
-
-            <!-- Instituto Amparo de María -->
-            <div class="relative pt-12">
-              <div class="flex justify-between items-start mb-4">
-                <h3 class="text-xl font-semibold text-[var(--text-primary)]">Instituto Amparo de María</h3>
-                <span class="text-sm">Secundario</span>
+            <!-- Secundario -->
+            <div class="p-6 rounded-2xl bg-[var(--bg-card)] border border-[var(--border-light)]">
+              <div class="flex items-center gap-2 mb-1">
+                <i data-lucide="school" class="w-5 h-5 text-emerald-600"></i>
+                <span class="text-xs font-medium text-emerald-600 uppercase tracking-wider">Secundario</span>
               </div>
-              <p class="text-[var(--text-secondary)] text-sm">
-                Nivel Secundario con Orientación en <strong class="font-medium">Economía y Gestión de las Organizaciones</strong> · Egreso 2026
-              </p>
-              <p class="text-[var(--text-secondary)] text-xs">
-                Base contable, administrativa y organizacional desarrollada durante el nivel secundario, enfocada en la gestión de recursos y el análisis económico.
-              </p>
+              <h3 class="text-lg font-semibold text-[var(--text-primary)] mb-1">Instituto Amparo de María</h3>
+              <p class="text-sm text-[var(--text-secondary)] mb-1">Orientación en <strong class="font-medium">Economía y Gestión de las Organizaciones</strong></p>
+              <p class="text-xs text-[var(--muted)]">Egreso 2026</p>
             </div>
           </div>
         </div>
 
-        <!-- Matriz de Habilidades y Competencias -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <!-- Habilidades e Idiomas -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+
           <!-- Habilidades -->
           <div class="reveal">
-            <h3 class="text-2xl font-bold text-[var(--text-primary)] mb-6">Matriz de Habilidades y Competencias</h3>
-            
+            <h3 class="text-2xl font-bold text-[var(--text-primary)] mb-6">Habilidades y Competencias</h3>
+
             <div class="mb-6">
-              <h4 class="font-semibold text-[var(--text-primary)] mb-3">Herramientas</h4>
-              <div class="grid grid-cols-2 gap-3">
-                <span class="chip-tag px-3 py-1.5 rounded-full text-xs font-medium bg-[var(--border-light)] text-[var(--text-primary)]">Excel (registro y control de cobros)</span>
-                <span class="chip-tag px-3 py-1.5 rounded-full text-xs font-medium bg-[var(--border-light)] text-[var(--text-primary)]">Microsoft Word</span>
+              <h4 class="text-sm font-semibold text-[var(--text-secondary)] uppercase tracking-wider mb-3">Herramientas</h4>
+              <div class="flex flex-wrap gap-2">
+                <span class="px-3 py-1.5 rounded-full text-xs font-medium border border-[var(--border-light)] bg-[var(--bg-card)] text-[var(--text-primary)]">Excel (registro y control de cobros)</span>
+                <span class="px-3 py-1.5 rounded-full text-xs font-medium border border-[var(--border-light)] bg-[var(--bg-card)] text-[var(--text-primary)]">Microsoft Word</span>
               </div>
             </div>
 
             <div>
-              <h4 class="font-semibold text-[var(--text-primary)] mb-3">Competencias Clave</h4>
-              <div class="grid grid-cols-2 gap-3">
-                <span class="chip-tag px-3 py-1.5 rounded-full text-xs font-medium bg-[var(--border-light)] text-[var(--text-primary)]">Manejo de números</span>
-                <span class="chip-tag px-3 py-1.5 rounded-full text-xs font-medium bg-[var(--border-light)] text-[var(--text-primary)]">Organización de información</span>
-              </div>
-              <div class="grid grid-cols-2 gap-3">
-                <span class="chip-tag px-3 py-1.5 rounded-full text-xs font-medium bg-[var(--border-light)] text-[var(--text-primary)]">Trabajo autónomo</span>
-                <span class="chip-tag px-3 py-1.5 rounded-full text-xs font-medium bg-[var(--border-light)] text-[var(--text-primary)]">Investigación y redacción</span>
-              </div>
-              <div class="grid grid-cols-2 gap-3">
-                <span class="chip-tag px-3 py-1.5 rounded-full text-xs font-medium bg-[var(--border-light)] text-[var(--text-primary)]">Oratoria y negociación</span>
+              <h4 class="text-sm font-semibold text-[var(--text-secondary)] uppercase tracking-wider mb-3">Competencias Clave</h4>
+              <div class="flex flex-wrap gap-2">
+                <span class="px-3 py-1.5 rounded-full text-xs font-medium border border-[var(--border-light)] bg-[var(--bg-card)] text-[var(--text-primary)]">Manejo de números</span>
+                <span class="px-3 py-1.5 rounded-full text-xs font-medium border border-[var(--border-light)] bg-[var(--bg-card)] text-[var(--text-primary)]">Organización de información</span>
+                <span class="px-3 py-1.5 rounded-full text-xs font-medium border border-[var(--border-light)] bg-[var(--bg-card)] text-[var(--text-primary)]">Trabajo autónomo</span>
+                <span class="px-3 py-1.5 rounded-full text-xs font-medium border border-[var(--border-light)] bg-[var(--bg-card)] text-[var(--text-primary)]">Investigación y redacción</span>
+                <span class="px-3 py-1.5 rounded-full text-xs font-medium border border-[var(--border-light)] bg-[var(--bg-card)] text-[var(--text-primary)]">Oratoria y negociación (Modelo de Naciones Unidas)</span>
               </div>
             </div>
           </div>
@@ -672,13 +751,13 @@
           <div class="reveal">
             <h3 class="text-2xl font-bold text-[var(--text-primary)] mb-6">Idiomas</h3>
             <div class="space-y-4">
-              <div>
+              <div class="p-4 rounded-xl bg-[var(--bg-card)] border border-[var(--border-light)] flex items-center justify-between">
                 <span class="font-medium text-[var(--text-primary)]">Español</span>
-                <span class="text-[var(--accent-emerald)] font-medium">Nativo</span>
+                <span class="text-xs font-semibold text-emerald-600 bg-emerald-50 px-2 py-1 rounded-full">Nativo</span>
               </div>
-              <div>
+              <div class="p-4 rounded-xl bg-[var(--bg-card)] border border-[var(--border-light)] flex items-center justify-between">
                 <span class="font-medium text-[var(--text-primary)]">Inglés</span>
-                <span class="text-[var(--accent-royal)] font-medium">Básico</span>
+                <span class="text-xs font-semibold text-[var(--accent-royal)] bg-blue-50 px-2 py-1 rounded-full">Básico</span>
               </div>
             </div>
           </div>
@@ -686,74 +765,100 @@
       </div>
     </section>
 
-    <!-- Footer / Contacto -->
-    <footer id="contacto" class="py-12 px-6 bg-[var(--bg-primary)] border-t border-[var(--border-light)]">
+    <!-- =============================================
+         FOOTER / CONTACTO
+    ============================================== -->
+    <footer id="contacto" class="py-16 px-4 sm:px-6 bg-[var(--bg-primary)] border-t border-[var(--border-light)]">
       <div class="max-w-7xl mx-auto">
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+
+          <!-- Sobre -->
           <div>
-            <h4 class="font-semibold text-[var(--text-primary)] mb-4">Azul Ruiz</h4>
-            <p class="text-[var(--text-secondary)] text-sm">
-              Contador Público en formación · Especializada en control de cobros Excel · Administración
+            <h4 class="font-semibold text-[var(--text-primary)] mb-3">Azul Ruiz</h4>
+            <p class="text-[var(--text-secondary)] text-sm leading-relaxed">
+              Estudiante de Contador Público (UNC) · Control de cobros Excel · Administración · Córdoba Capital
             </p>
           </div>
 
+          <!-- Links -->
           <div>
-            <h4 class="font-semibold text-[var(--text-primary)] mb-4">Enlaces Rápidos</h4>
-            <ul class="space-y-3 text-[var(--text-secondary)] text-sm">
-              <li><a href="#about" class="hover:text-[var(--text-primary)] transition-colors">Sobre Mí</a></li>
+            <h4 class="font-semibold text-[var(--text-primary)] mb-3">Navegación</h4>
+            <ul class="space-y-2 text-sm text-[var(--text-secondary)]">
+              <li><a href="#about"     class="hover:text-[var(--text-primary)] transition-colors">Sobre Mí</a></li>
               <li><a href="#experience" class="hover:text-[var(--text-primary)] transition-colors">Experiencia</a></li>
-              <li><a href="#catalogo" class="hover:text-[var(--text-primary)] transition-colors">Catálogo</a></li>
+              <li><a href="#simulator" class="hover:text-[var(--text-primary)] transition-colors">Simulador</a></li>
+              <li><a href="#catalogo"  class="hover:text-[var(--text-primary)] transition-colors">Catálogo</a></li>
               <li><a href="#education" class="hover:text-[var(--text-primary)] transition-colors">Educación</a></li>
             </ul>
           </div>
 
+          <!-- Contacto -->
           <div>
-            <h4 class="font-semibold text-[var(--text-primary)] mb-4">Contacto</h4>
-            <p class="text-[var(--text-secondary)] text-sm mb-2 flex items-center gap-2">
-              <i data-lucide="phone" class="w-4 h-4" />
-              +54 9 351 206-2487
-            </p>
-            <p class="text-[var(--text-secondary)] text-sm mb-2 flex items-center gap-2">
-              <i data-lucide="mail" class="w-4 h-4" />
-              azulmartinaruizf@gmail.com
-            </p>
-            <p class="text-[var(--text-secondary)] text-sm flex items-center gap-2">
-              <i data-lucide="linkedin" class="w-4 h-4" />
-              <a href="https://www.linkedin.com/in/azul-ruiz" target="_blank" class="hover:text-[var(--accent-royal)] transition-colors">linkedin.com/in/azul-ruiz</a>
-            </p>
+            <h4 class="font-semibold text-[var(--text-primary)] mb-3">Contacto</h4>
+            <ul class="space-y-2 text-sm text-[var(--text-secondary)]">
+              <li class="flex items-center gap-2">
+                <i data-lucide="phone" class="w-4 h-4 flex-shrink-0"></i>
+                <a href="tel:+5493512062487" class="hover:text-[var(--text-primary)] transition-colors">+54 9 351 206-2487</a>
+              </li>
+              <li class="flex items-center gap-2">
+                <i data-lucide="mail" class="w-4 h-4 flex-shrink-0"></i>
+                <a href="mailto:azulmartinaruizf@gmail.com" class="hover:text-[var(--text-primary)] transition-colors">azulmartinaruizf@gmail.com</a>
+              </li>
+              <li class="flex items-center gap-2">
+                <i data-lucide="linkedin" class="w-4 h-4 flex-shrink-0"></i>
+                <a href="https://www.linkedin.com/in/azul-ruiz" target="_blank" rel="noopener" class="hover:text-[var(--accent-royal)] transition-colors">linkedin.com/in/azul-ruiz</a>
+              </li>
+            </ul>
           </div>
 
+          <!-- Redes / CV -->
           <div>
-            <h4 class="font-semibold text-[var(--text-primary)] mb-4">Redes Sociales</h4>
-            <div class="flex gap-3">
-              <!-- LinkedIn -->
-              <a href="https://www.linkedin.com/in/azul-ruiz" target="_blank" class="w-10 h-10 rounded-full bg-[var(--border-light)] flex items-center justify-center hover:bg-[var(--accent-royal)] transition-colors">
-                <i data-lucide="linkedin" class="w-5 h-5 text-[var(--text-primary)]" />
-              </a>
-              <!-- GitHub -->
-              <a href="https://github.com" target="_blank" class="w-10 h-10 rounded-full bg-[var(--border-light)] flex items-center justify-center hover:bg-[var(--accent-royal)] transition-colors">
-                <i data-lucide="git-branch" class="w-5 h-5 text-[var(--text-primary)]" />
+            <h4 class="font-semibold text-[var(--text-primary)] mb-3">CV y Redes</h4>
+            <div class="flex gap-3 mb-4">
+              <a href="https://www.linkedin.com/in/azul-ruiz" target="_blank" rel="noopener" aria-label="LinkedIn"
+                 class="w-9 h-9 rounded-full bg-[var(--border-light)] flex items-center justify-center hover:bg-[var(--accent-royal)] hover:text-white transition-colors">
+                <i data-lucide="linkedin" class="w-4 h-4"></i>
               </a>
             </div>
-            <p class="mt-4 text-[var(--text-secondary)] text-xs">
-              © 2026 Azul Ruiz. Todos los derechos reservados.
-            </p>
+            <div class="flex flex-col gap-2">
+              <a href="assets/CV_Azul_Ruiz_Virtual.pdf" target="_blank" class="text-xs text-[var(--text-secondary)] hover:text-[var(--accent-royal)] transition-colors flex items-center gap-1">
+                <i data-lucide="file-text" class="w-3 h-3"></i> CV Virtual / ATS
+              </a>
+              <a href="assets/CV_Azul_Ruiz_Impresion.pdf" download="CV_Azul_Ruiz_Impresion.pdf" class="text-xs text-[var(--text-secondary)] hover:text-emerald-600 transition-colors flex items-center gap-1">
+                <i data-lucide="file" class="w-3 h-3"></i> CV Impresión / Diseño
+              </a>
+            </div>
+            <p class="mt-4 text-[var(--muted)] text-xs">© 2026 Azul Ruiz. Todos los derechos reservados.</p>
           </div>
         </div>
       </div>
     </footer>
 
-    <!-- Toast Notification -->
-    <div id="toast" class="fixed bottom-6 right-6 px-6 py-3 rounded-lg bg-[var(--bg-card)] border border-[var(--border-light)] text-[var(--text-primary)] opacity-0 shadow-lg transition-all z-50">
-      <span id="toast-message">Email copiado al portapapeles</span>
-      <button id="toast-close" class="ml-4 text-[var(--muted)] hover:opacity-80" aria-label="Cerrar">
-        <i data-lucide="x" class="w-4 h-4" />
+    <!-- =============================================
+         TOAST NOTIFICATION
+    ============================================== -->
+    <div
+      id="toast"
+      class="fixed bottom-6 right-6 px-5 py-3 rounded-xl bg-[var(--bg-card)] border border-[var(--border-light)] text-[var(--text-primary)] shadow-xl z-50 flex items-center gap-3"
+      style="opacity:0; transform:translateY(12px);"
+      role="status"
+      aria-live="polite"
+    >
+      <span id="toast-message">Acción realizada</span>
+      <button id="toast-close" class="text-[var(--muted)] hover:opacity-70 ml-1" aria-label="Cerrar notificación">
+        <i data-lucide="x" class="w-4 h-4"></i>
       </button>
     </div>
 
+    <!-- App JS como módulo ES -->
+    <script type="module" src="js/app.js"></script>
+
+    <!-- Inicializar Lucide después de que el DOM esté listo -->
     <script>
-      // Inicializar Lucide Icons
-      lucide.createIcons();
+      document.addEventListener('DOMContentLoaded', function () {
+        if (window.lucide) window.lucide.createIcons();
+      });
     </script>
+
   </body>
 </html>

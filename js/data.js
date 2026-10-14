@@ -1,18 +1,6 @@
 // ===========================================
 // js/data.js - Datos centralizados para el portafolio de Azul Ruiz
 // ===========================================
-// Este archivo contiene toda la información del perfil, experiencia,
-// educación, habilidades y el arreglo de elementos del catálogo.
-// Para agregar nuevos elementos al catálogo, solo necesitas agregar un objeto
-// al arreglo PORTFOLIO_ITEMS con las propiedades definidas a continuación.
-// Formato en 5 líneas:
-// {
-//   id: 'único',
-//   titulo: 'Título',
-//   categoria: 'categoría',
-//   descripcion: 'Descripción',
-//   preview: 'Vista previa',
-// }
 
 // ===========================================
 // DATOS DEL PERFIL
@@ -28,11 +16,12 @@ export const perfil = {
   email: 'azulmartinaruizf@gmail.com',
   telefono: '+54 9 351 206-2487',
   linkedin: 'https://www.linkedin.com/in/azul-ruiz',
-  sobreMi: 'Estudiante con orientación en Economía y Gestión de las Organizaciones, próxima a comenzar Contador Público en la UNC. Buena con los números y con muchas ganas de aprender. Con experiencia práctica en el control de cobros de obras sociales y prepagas. Busco mi primer empleo o pasantía en tareas administrativas o contables, presencial o remoto en Córdoba, con horarios compatibles con el cursado.',
+  sobreMi:
+    'Estudiante con orientación en Economía y Gestión de las Organizaciones, próxima a comenzar Contador Público en la UNC. Buena con los números y con muchas ganas de aprender. Con experiencia práctica en el control de cobros de obras sociales y prepagas. Busco mi primer empleo o pasantía en tareas administrativas o contables, presencial o remoto en Córdoba, con horarios compatibles con el cursado.',
 };
 
 // ===========================================
-// EXPERIENCE PROFESSIONAL
+// EXPERIENCIA PROFESIONAL
 // ===========================================
 export const experiencia = [
   {
@@ -44,8 +33,8 @@ export const experiencia = [
     responsabilidades: [
       'Reviso la planilla de turnos del consultorio e identifico los pacientes efectivamente atendidos.',
       'Registro cuántos pacientes se atendieron de cada obra social y prepaga (APROSS, Nobis y otras), por día y por mes.',
-      'Verifico que los pagos informados por cada obra social y prepaga (liquidación en PDF) sean correctos, considerando que cada una paga distinto.',
-      'Hago este control de forma continua desde un año.',
+      'Verifico que los pagos informados por cada obra social y prepaga (liquidación en PDF) sean correctos, considerando que cada una paga un arancel distinto.',
+      'Realizo este control de forma continua desde hace un año (desde octubre de 2025).',
     ],
     proceso: [
       {
@@ -56,7 +45,8 @@ export const experiencia = [
       {
         id: 2,
         titulo: 'Registro Diario y Mensual (Excel)',
-        descripcion: 'Conteo y organización en Excel de pacientes atendidos por día y por mes según obra social y prepaga (APROSS, Nobis y otras).',
+        descripcion:
+          'Conteo y organización en Excel de pacientes atendidos por día y por mes según obra social y prepaga (APROSS, Nobis y otras).',
       },
       {
         id: 3,
@@ -66,7 +56,8 @@ export const experiencia = [
       {
         id: 4,
         titulo: 'Verificación de Cobros y Aranceles',
-        descripcion: 'Control de que los importes informados en el PDF sean correctos, considerando que cada obra social y prepaga paga un valor distinto.',
+        descripcion:
+          'Control de que los importes informados en el PDF sean correctos, considerando que cada obra social y prepaga paga un arancel distinto.',
       },
     ],
   },
@@ -75,83 +66,110 @@ export const experiencia = [
 // ===========================================
 // SIMULADOR EXCEL / PLANILLA DE CONTROL
 // ===========================================
+// Filtros: 'all', 'correcto', 'diferencia', 'verificacion'
+// Estados posibles en datos: 'correcto' | 'diferencia' | 'verificacion'
 export const simuladorExcel = {
   titulo: 'Vista Previa Interactiva de Planilla de Control (Demo)',
   descripcion:
-    'Demostración interactiva con valores simulados (ej. APROSS, Nobis Medical, Obra Social Sindical, Prepaga Nacional) que replica la lógica de verificación de cobros entre la planilla de turnos y las liquidaciones en PDF.',
-  estados: ['Todos', '✅ Pago Correcto', '⚠️ Diferencia en PDF', '𔁋 En Verificación'],
+    'Demostración interactiva con valores simulados. Replica la lógica de verificación de cobros entre la planilla de turnos y las liquidaciones en PDF de obras sociales y prepagas.',
+  nota: 'Demostración con valores simulados. No son datos reales.',
   columnas: [
-    { field: 'entidad', header: 'Obra Social / Prepaga', width: '200px' },
-    { field: 'periodo', header: 'Período (Mes / Día)', width: '140px' },
-    { field: 'pacientes', header: 'Pacientes Atendidos (Turnos)', width: '130px' },
-    { field: 'arancel', header: 'Arancel Unitario (según entidad)', width: '130px' },
-    { field: 'total_esperado', header: 'Total Esperado (Excel)', width: '130px' },
-    { field: 'total_pdf', header: 'Total Informado (Liquidación PDF)', width: '140px' },
-    { field: 'estado', header: 'Estado de Control', width: '130px' },
+    { field: 'entidad',        header: 'Obra Social / Prepaga',           },
+    { field: 'periodo',        header: 'Período',                         },
+    { field: 'pacientes',      header: 'Pacientes atendidos (turnos)',    },
+    { field: 'arancel',        header: 'Arancel unitario',                },
+    { field: 'total_esperado', header: 'Total esperado (Excel)',          },
+    { field: 'total_pdf',      header: 'Total informado (liquidación PDF)'},
+    { field: 'estado',         header: 'Estado',                          },
   ],
   datos: [
     {
       codigo: 'PRAC-001',
       entidad: 'APROSS',
-      periodo: 'Enero 2024',
+      periodo: 'Octubre 2025',
       pacientes: 45,
       arancel: 1250,
       total_esperado: 56250,
       total_pdf: 56000,
-      estado: '⚠️ Diferencia en PDF',
+      estado: 'diferencia',
     },
     {
       codigo: 'PRAC-002',
       entidad: 'Nobis Medical',
-      periodo: 'Enero 2024',
+      periodo: 'Octubre 2025',
       pacientes: 32,
       arancel: 980,
       total_esperado: 31360,
       total_pdf: 31360,
-      estado: '✅ Pago Correcto',
+      estado: 'correcto',
     },
     {
       codigo: 'PRAC-003',
       entidad: 'Obra Social Sindical',
-      periodo: 'Enero 2024',
+      periodo: 'Octubre 2025',
       pacientes: 67,
       arancel: 850,
       total_esperado: 56950,
       total_pdf: 57500,
-      estado: '𔁋 En Verificación',
+      estado: 'verificacion',
     },
     {
       codigo: 'PRAC-004',
       entidad: 'Prepaga Nacional',
-      periodo: 'Enero 2024',
+      periodo: 'Octubre 2025',
       pacientes: 53,
       arancel: 1250,
       total_esperado: 66250,
       total_pdf: 66500,
-      estado: '𔁋 En Verificación',
+      estado: 'verificacion',
     },
     {
       codigo: 'PRAC-005',
       entidad: 'APROSS',
-      periodo: 'Febrero 2024',
+      periodo: 'Noviembre 2025',
       pacientes: 28,
       arancel: 1250,
       total_esperado: 35000,
       total_pdf: 35000,
-      estado: '✅ Pago Correcto',
+      estado: 'correcto',
+    },
+    {
+      codigo: 'PRAC-006',
+      entidad: 'Nobis Medical',
+      periodo: 'Noviembre 2025',
+      pacientes: 38,
+      arancel: 980,
+      total_esperado: 37240,
+      total_pdf: 37240,
+      estado: 'correcto',
+    },
+    {
+      codigo: 'PRAC-007',
+      entidad: 'APROSS',
+      periodo: 'Diciembre 2025',
+      pacientes: 41,
+      arancel: 1250,
+      total_esperado: 51250,
+      total_pdf: 50000,
+      estado: 'diferencia',
+    },
+    {
+      codigo: 'PRAC-008',
+      entidad: 'Prepaga Nacional',
+      periodo: 'Enero 2026',
+      pacientes: 29,
+      arancel: 1250,
+      total_esperado: 36250,
+      total_pdf: 36250,
+      estado: 'correcto',
     },
   ],
-  resumenes: {
-    totalCalculado: 240660,
-    prestacionesAuditadas: 225,
-    porcentajeControl: 80,
-  },
 };
 
 // ===========================================
 // CATÁLOGO DE GESTIÓN, RECURSOS Y PROYECTOS
 // ===========================================
-// Filtros disponibles: 'todos', 'gestion-excel', 'academico-economico', 'oratoria-liderazgo'
+// Categorías: 'gestion-excel' | 'academico-economico' | 'oratoria-liderazgo'
 export const PORTFOLIO_ITEMS = [
   {
     id: 'sistema-control',
@@ -159,26 +177,24 @@ export const PORTFOLIO_ITEMS = [
     categoria: 'gestion-excel',
     etiqueta: 'Gestión y Excel',
     preview:
-      'Estructura de hojas de cálculo para cruzar importes y preparar la facturación mensual sin errores. Incluye validación de datos, fórmulas automáticas y reportes resumidos por entidad.',
+      'Planillas de control para cruzar importes entre la planilla de turnos y las liquidaciones en PDF. Incluye validación de datos, fórmulas automáticas y reportes resumidos por entidad.',
     detalles: [
       'Organización por entidad y período mensual',
       'Fórmulas automáticas de cálculo de importes totales',
-      'Validación de datos para evitar errores de facturación',
+      'Validación de datos para control de cobros',
       'Reportes resumidos listos para presentación al profesional',
     ],
     modal: {
       titulo: 'Registro de Pacientes y Control de Liquidaciones',
       categoria: 'Gestión y Excel',
-      vistaPrevia:
-        'Sistema estructurado para el control de liquidaciones mensuales de obras sociales y prepagas, con validación automática y reportes consolidados.',
       descripcion:
-        'Desarrollé un sistema de hojas de cálculo estructurado para gestionar y controlar los cobros mensuales de obras sociales y prepagas. Cada hoja está diseñada para cruzar automáticamente los importes consultados, aplicar los aranceles correspondientes y generar reportes consolidados listos para la facturación. El sistema incluye validación de datos para prevenir errores comunes en la liquidación, permitiendo una entrega oportuna y precisa de comprobantes al profesional médico. La estructura es modular y puede adaptarse a diferentes tipos de obras sociales con valores de arancel variables.',
+        'Sistema de hojas de cálculo estructurado para gestionar y controlar los cobros mensuales de obras sociales y prepagas. Cada hoja está diseñada para cruzar automáticamente los importes consultados, aplicar los aranceles correspondientes y generar reportes consolidados. El sistema incluye validación de datos para prevenir errores comunes en el control, permitiendo una entrega oportuna y precisa al profesional médico.',
       tecnologias: ['Microsoft Excel', 'Validación de datos', 'Fórmulas avanzadas', 'Control de cobros'],
     },
   },
   {
     id: 'onu',
-    titulo: 'Participación y Documento de Posición – Modelo de Naciones Unidas (ONU)',
+    titulo: 'Participación y Documento de Posición – Modelo de Naciones Unidas',
     categoria: 'oratoria-liderazgo',
     etiqueta: 'Oratoria y Liderazgo',
     preview:
@@ -192,10 +208,8 @@ export const PORTFOLIO_ITEMS = [
     modal: {
       titulo: 'Participación – Modelo de Naciones Unidas',
       categoria: 'Oratoria y Liderazgo',
-      vistaPrevia:
-        'Participación como delegada en modelo de Naciones Unidas, con investigación de posturas oficiales y redacción formal de documentos de posición.',
       descripcion:
-        'Fui delegada en un modelo de Naciones Unidas donde realicé una investigación exhaustiva de la postura oficial de un país miembro respecto al tema en discusión. Redacté un documento de posición formal argumentando las posiciones y intereses de mi país, el cual fue presentado en el recinto multilateral. Participé en sesiones de negociación con otras delegaciones para encontrar puntos de consenso y redactar proyectos de resolución. Desarrollé habilidades de oratoria, diplomacia y negociación internacional, aprendiendo a articular argumentos convincentes dentro de los procedimientos formales de la ONU. Esta experiencia fortaleció mi capacidad de investigación, redacción formal y trabajo en equipo bajo presión.',
+        'Fui delegada en un Modelo de Naciones Unidas donde realicé una investigación exhaustiva de la postura oficial de un país miembro respecto al tema en discusión. Redacté un documento de posición formal argumentando las posiciones e intereses de mi país, el cual fue presentado en el recinto multilateral. Participé en sesiones de negociación con otras delegaciones para encontrar puntos de consenso y redactar proyectos de resolución. Desarrollé habilidades de oratoria, diplomacia y negociación internacional.',
       tecnologias: ['Investigación diplomática', 'Redacción formal', 'Oratoria', 'Negociación'],
     },
   },
@@ -205,7 +219,7 @@ export const PORTFOLIO_ITEMS = [
     categoria: 'academico-economico',
     etiqueta: 'Académico y Economía',
     preview:
-      'Base contable, administrativa y organizacional desarrollada durante la orientación del nivel secundario y el ingreso a Ciencias Económicas.',
+      'Base contable, administrativa y organizacional desarrollada durante la orientación del nivel secundario y el ingreso a Ciencias Económicas (UNC).',
     detalles: [
       'Formación contable y administrativa del nivel secundario',
       'Base en economía y gestión organizacional',
@@ -214,10 +228,8 @@ export const PORTFOLIO_ITEMS = [
     modal: {
       titulo: 'Formación en Economía y Gestión',
       categoria: 'Académico y Economía',
-      vistaPrevia:
-        'Base contable, administrativa y organizacional desarrollada durante la orientación del nivel secundario y el ingreso a Ciencias Económicas.',
       descripcion:
-        'Durante la orientación en Economía y Gestión de las Organizaciones del nivel secundario, y con el ingreso a la carrera de Ciencias Económicas en la UNC, adquirí una base sólida en contabilidad administrativa, análisis económico y gestión organizacional. Esta formación me permitió entender cómo funcionan las estructuras organizacionales, desde el manejo de recursos básicos hasta el análisis de indicadores de desempeño. La base contable me brinda herramientas para la organización financiera y el registro de transacciones, mientras que el enfoque en economía me permite analizar factores macro y microeconomicos que impactan en la gestión administrativa. Esta formación complementa mi experiencia práctica en control de cobros y me prepara para asumir responsabilidades contables en entornos profesionales.',
+        'Durante la orientación en Economía y Gestión de las Organizaciones del nivel secundario, y con el ingreso a la carrera de Ciencias Económicas en la UNC, adquirí una base sólida en contabilidad administrativa, análisis económico y gestión organizacional. La base contable me brinda herramientas para la organización financiera y el registro de transacciones, mientras que el enfoque en economía me permite analizar factores que impactan en la gestión administrativa. Esta formación complementa mi experiencia práctica en control de cobros.',
       tecnologias: ['Contabilidad administrativa', 'Economía', 'Gestión organizacional', 'Análisis de datos'],
     },
   },
@@ -231,22 +243,17 @@ export const PORTFOLIO_ITEMS = [
     detalles: [
       'Plantillas de Excel avanzadas para control de cobros y liquidaciones',
       'Trabajos prácticos y casos de estudio de la carrera de Contador Público',
-      'Certificados y documentos de la UNC disponibles para descarga',
+      'Certificados y documentos de la UNC disponibles próximamente',
     ],
     modal: {
       titulo: 'Próximos Proyectos & Recursos',
-      categoria: 'UNC',
-      vistaPrevia:
-        'Espacio en constante actualización con nuevas plantillas de Excel, trabajos prácticos de Ciencias Económicas y certificaciones.',
+      categoria: 'Académico y Economía',
       descripcion:
         'Este espacio se irá actualizando gradualmente con nuevos recursos: plantillas de hojas de cálculo para control financiero, trabajos prácticos y ejercicios de la carrera de Contador Público en la UNC, certificados y documentos académicos relevantes para el desarrollo profesional en contabilidad y administración.',
       tecnologias: ['Microsoft Excel', 'Recursos UNC', 'Certificación', 'Aprendizaje continuo'],
     },
   },
 ];
-// Comentario para desarrolladores sobre cómo agregar nuevos ítems
-// Agrega un nuevo objeto PORTFOLIO_ITEMS siguiendo el mismo formato.
-// Asegúrate de incluir: id, titulo, categoria, etiqueta, preview, detalles (opcional), modal (opcional)
 
 // ===========================================
 // EDUCACIÓN
@@ -272,19 +279,19 @@ export const educacion = [
 ];
 
 // ===========================================
-// HABILidades Y COMPETENCIAS
+// HABILIDADES Y COMPETENCIAS
 // ===========================================
 export const habilidades = {
   herramientas: [
-    { nombre: 'Excel (registro y control de cobros)', nivel: 'Avanzado', descripcion: 'Cálculos, fórmulas, organización de planillas y control de cobros' },
-    { nombre: 'Microsoft Word', nivel: 'Intermedio', descripcion: 'Redacción formal e informes' },
+    { nombre: 'Excel (registro y control de cobros)', nivel: 'Avanzado' },
+    { nombre: 'Microsoft Word', nivel: 'Intermedio' },
   ],
   competencias: [
     'Manejo de números',
     'Organización de información',
     'Trabajo autónomo',
     'Investigación y redacción',
-    'Oratoria y negociación',
+    'Oratoria y negociación (Modelo de Naciones Unidas)',
   ],
   idiomas: [
     { idioma: 'Español', nivel: 'Nativo' },
@@ -296,21 +303,6 @@ export const habilidades = {
 // CONFIGURACIÓN DE TEMA
 // ===========================================
 export const tema = {
-  modoPredeterminado: 'light', // 'light' o 'dark'
+  modoPredeterminado: 'light',
   claveStorage: 'azul-ruiz-tema',
 };
-
-// ===========================================
-// ETIQUETAS DE CATEGORÍA PARA FILTROS
-// ===========================================
-export const ETIQUETAS_CATEGORIA = {
-  'gestion-excel': 'Gestión y Excel',
-  'academico-economico': 'Académico y Economía',
-  'oratoria-liderazgo': 'Oratoria y Liderazgo',
-  todos: 'Todos',
-};
-
-// ===========================================
-// MENSAJE DE BIENVENIDA PARA EL CONSOLA (Desarrollo)
-// ===========================================
-// console.log('🟡 Portafolio Azul Ruiz - Datos cargados exitosamente');

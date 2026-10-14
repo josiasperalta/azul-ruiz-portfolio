@@ -21,3 +21,9 @@ Desktop.ini
 
 # Configuración personalada
 .settings/
+
+# Archivos temporales de testing
+screenshots/
+test-playwright.mjs
+package.json
+package-lock.json

@@ -1,719 +1,511 @@
 // ===========================================
 // js/app.js - Lógica interactiva del portafolio de Azul Ruiz
 // ===========================================
-// Gestiona: renderizado dinámico, filtros, simulador Excel,
-// cambio de tema, toast notification, menú móvil y QR/vCard.
+// type="module" — se carga como ES Module desde index.html
 
-import { perfil, experiencia, simuladorExcel, PORTFOLIO_ITEMS, educacion, habilidades, tema } from './data.js';
+import { perfil, simuladorExcel, PORTFOLIO_ITEMS, educacion, habilidades, tema } from './data.js';
 
 // ===========================================
-// INICIALIZACIÓN
+// UTILIDADES GLOBALES
 // ===========================================
-document.addEventListener('DOMContentLoaded', function () {
+
+/** Llama a lucide.createIcons() de forma segura */
+function refreshIcons() {
+  if (window.lucide) {
+    try { window.lucide.createIcons(); } catch (e) { /* noop */ }
+  }
+}
+
+/** Formatea número como moneda argentina */
+function formatARS(n) {
+  return '$ ' + Number(n).toLocaleString('es-AR');
+}
+
+// ===========================================
+// INICIALIZACIÓN ÚNICA
+// ===========================================
+function init() {
   // Aplicar tema guardado o predeterminado
-  aplicarTema(tema.modoPredeterminado);
+  try {
+    const guardado = localStorage.getItem(tema.claveStorage);
+    aplicarTema(guardado || tema.modoPredeterminado);
+  } catch (_) {
+    aplicarTema(tema.modoPredeterminado);
+  }
 
-  // Renderizar secciones
-  renderizarHero();
-  renderizarPortafolio();
-  renderizarEducacion();
-  renderizarHabilidades();
+  // Renderizar cada sección con su propio try/catch
+  try { renderizarPortafolio(); }  catch (e) { console.error('[renderizarPortafolio]', e); }
+  try { renderizarSimulador();   }  catch (e) { console.error('[renderizarSimulador]', e); }
+  try { configurarFiltrosCatalogo(); } catch (e) { console.error('[filtrosCatalogo]', e); }
+  try { configurarFiltrosSimulador(); } catch (e) { console.error('[filtrosSimulador]', e); }
+  try { configurarEventListeners(); }   catch (e) { console.error('[eventListeners]', e); }
+  try { configurarIntersectionObserver(); } catch (e) {
+    console.error('[IntersectionObserver]', e);
+    // Fallback: mostrar todos los .reveal inmediatamente
+    document.querySelectorAll('.reveal').forEach(el => el.classList.add('visible'));
+  }
+  try { configurarNavbarScroll(); } catch (e) { console.error('[navbarScroll]', e); }
 
-  // Configurar event listeners
-  configurarEventListeners();
-});
+  // Fallback de 2 s: elementos .reveal que sigan ocultos
+  setTimeout(() => {
+    document.querySelectorAll('.reveal:not(.visible)').forEach(el => el.classList.add('visible'));
+  }, 2000);
+
+  refreshIcons();
+}
+
+document.addEventListener('DOMContentLoaded', init);
+
+// ===========================================
+// TEMA CLARO / OSCURO
+// Un único mecanismo: clase "dark" en <html>
+// ===========================================
+function aplicarTema(modo) {
+  const html = document.documentElement;
+  const sunIcon  = document.getElementById('sun-icon');
+  const moonIcon = document.getElementById('moon-icon');
+
+  if (modo === 'dark') {
+    html.classList.add('dark');
+    document.body.classList.add('dark-mode');
+    if (sunIcon)  sunIcon.classList.add('hidden');
+    if (moonIcon) moonIcon.classList.remove('hidden');
+  } else {
+    html.classList.remove('dark');
+    document.body.classList.remove('dark-mode');
+    if (sunIcon)  sunIcon.classList.remove('hidden');
+    if (moonIcon) moonIcon.classList.add('hidden');
+  }
+
+  try { localStorage.setItem(tema.claveStorage, modo === 'dark' ? 'dark' : 'light'); }
+  catch (_) { /* noop */ }
+}
 
 // ===========================================
 // CONFIGURAR EVENT LISTENERS
 // ===========================================
 function configurarEventListeners() {
-  // Toggle Dark/Light Mode
+  // Toggle Tema
   const themeToggle = document.getElementById('theme-toggle');
-  const sunIcon = document.getElementById('sun-icon');
-  const moonIcon = document.getElementById('moon-icon');
-
   if (themeToggle) {
-    themeToggle.addEventListener('click', function () {
-      const modoActual = document.documentElement.getAttribute('data-mode');
-      const nuevoModo = modoActual === 'dark' ? 'light' : 'dark';
-      aplicarTema(nuevoModo);
-      guardarPreferenciaTema(nuevoModo);
+    themeToggle.addEventListener('click', () => {
+      const esDark = document.documentElement.classList.contains('dark');
+      aplicarTema(esDark ? 'light' : 'dark');
     });
   }
 
-  // Cerrar menú móvil al hacer clic en un enlace
-  const mobileLinks = document.querySelectorAll('.mobile-menu a');
-  mobileLinks.forEach(link => {
-    link.addEventListener('click', () => {
-      const mobileMenu = document.querySelector('.mobile-menu');
-      if (mobileMenu) {
-        mobileMenu.style.right = '-100%';
+  // Botón hamburguesa menú móvil
+  const hamburguer = document.getElementById('menu-btn');
+  const mobileMenu = document.getElementById('mobile-menu');
+  if (hamburguer && mobileMenu) {
+    hamburguer.addEventListener('click', () => {
+      const abierto = mobileMenu.classList.contains('open');
+      mobileMenu.classList.toggle('open', !abierto);
+      hamburguer.setAttribute('aria-expanded', String(!abierto));
+    });
+    // Cerrar con Escape
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && mobileMenu.classList.contains('open')) {
+        mobileMenu.classList.remove('open');
+        hamburguer.setAttribute('aria-expanded', 'false');
       }
     });
-  });
-
-  // Filters del catálogo
-  const filterChips = document.querySelectorAll('.cato-filter-chip');
-  filterChips.forEach(chip => {
-    chip.addEventListener('click', function () {
-      // Actualizar clase selected
-      filterChips.forEach(c => c.classList.remove('selected'));
-      this.classList.add('selected');
-
-      // Filtrar items
-      const categoria = this.getAttribute('data-category');
-      filtrarPortafolio(categoria);
-    });
-  });
-
-  // Filters del simulador Excel
-  const excelFilterChips = document.querySelectorAll('.filter-chip');
-  excelFilterChips.forEach(chip => {
-    chip.addEventListener('click', function () {
-      excelFilterChips.forEach(c => c.classList.remove('selected'));
-      this.classList.add('selected');
-
-      const filtro = this.getAttribute('data-filter');
-      filtrarSimuladorExcel(filtro);
-    });
-  });
-
-  // Buscador en simulador
-  const searchInput = document.getElementById('search-input');
-  if (searchInput) {
-    searchInput.addEventListener('input', function (e) {
-      const termino = e.target.value.toLowerCase();
-      filtrarPorBusqueda(termino);
+    // Cerrar al tocar un enlace
+    mobileMenu.querySelectorAll('a').forEach(a => {
+      a.addEventListener('click', () => {
+        mobileMenu.classList.remove('open');
+        hamburguer.setAttribute('aria-expanded', 'false');
+      });
     });
   }
 
   // Dropdown CV
-  const cvDropdownBtn = document.getElementById('cv-dropdown-btn');
+  const cvBtn      = document.getElementById('cv-dropdown-btn');
   const cvDropdown = document.getElementById('cv-dropdown');
-
-  if (cvDropdownBtn && cvDropdown) {
-    cvDropdownBtn.addEventListener('click', function (e) {
+  if (cvBtn && cvDropdown) {
+    cvBtn.addEventListener('click', e => {
       e.stopPropagation();
       cvDropdown.classList.toggle('hidden');
     });
-
-    // Cerrar dropdown al hacer clic fuera
-    document.addEventListener('click', function (e) {
-      if (!cvDropdownBtn.contains(e.target) && !cvDropdown.contains(e.target)) {
+    document.addEventListener('click', e => {
+      if (!cvBtn.contains(e.target) && !cvDropdown.contains(e.target)) {
         cvDropdown.classList.add('hidden');
       }
     });
   }
 
-  // Modal close click outside
-  const modalOverlays = document.querySelectorAll('.modal-overlay');
-  modalOverlays.forEach(overlay => {
-    overlay.addEventListener('click', function (e) {
-      if (e.target === overlay || e.target.className.includes('modal-close')) {
-        cerrarModal(overlay);
-      }
-    });
-  });
+  // Modal QR
+  configurarModalQR();
 
-  // Cerrar modal con tecla Escape
-  document.addEventListener('keydown', function (e) {
+  // Toast close
+  const toastClose = document.getElementById('toast-close');
+  if (toastClose) {
+    toastClose.addEventListener('click', () => ocultarToast());
+  }
+
+  // Cerrar modal estático con Escape
+  document.addEventListener('keydown', e => {
     if (e.key === 'Escape') {
       const abierto = document.querySelector('.modal-overlay.open');
-      if (abierto) {
-        abierto.remove();
-      }
+      if (abierto) abierto.classList.remove('open');
+      // modales dinámicos
+      document.querySelectorAll('.modal-dinamico').forEach(m => m.remove());
     }
   });
 
-  // Toast notification - copiar email
-  const copyEmailBtn = document.querySelector('a[href="mailto:azulmartinaruizf@gmail.com"]');
-  const toast = document.getElementById('toast');
-  const toastMessage = document.getElementById('toast-message');
-  const toastClose = document.getElementById('toast-close');
-
-  if (copyEmailBtn && toast && toastMessage) {
-    copyEmailBtn.addEventListener('click', function (e) {
-      // El email ya está en el href, mostramos toast
-      mostrarToast('Email copiado al portapapeles');
+  // Buscador simulador
+  const searchInput = document.getElementById('search-input');
+  if (searchInput) {
+    searchInput.addEventListener('input', e => {
+      filtrarSimuladorPorBusqueda(e.target.value.toLowerCase());
     });
   }
+}
 
-  if (toastClose) {
-    toastClose.addEventListener('click', function () {
-      toast.classList.remove('show');
-    });
-  }
+// ===========================================
+// MODAL QR + vCARD
+// ===========================================
+let qrGenerado = false;
 
-  // Cerrar toast si el usuario hace clic fuera
-  if (toast) {
-    toast.addEventListener('click', function (e) {
-      if (e.target === toast) {
-        toast.classList.remove('show');
-      }
-    });
-  }
-
-  // QR Modal y vCard download
-  const qrBtn = document.getElementById('qr-btn');
+function configurarModalQR() {
+  const qrBtn   = document.getElementById('qr-btn');
   const qrModal = document.getElementById('qr-modal');
+  if (!qrBtn || !qrModal) return;
 
-  if (qrBtn && qrModal) {
-    // Abrir modal QR
-    qrBtn.addEventListener('click', function (e) {
-      e.stopPropagation();
-      qrModal.classList.add('open');
-      // Re-inicializar Lucide dentro del modal
-      setTimeout(lucide.createIcons, 100);
+  qrBtn.addEventListener('click', e => {
+    e.stopPropagation();
+    qrModal.classList.add('open');
+    generarQR();
+    refreshIcons();
+  });
+
+  // Cerrar al hacer clic fuera del contenido
+  qrModal.addEventListener('click', e => {
+    if (e.target === qrModal) qrModal.classList.remove('open');
+  });
+
+  // Botón cerrar dentro del modal
+  qrModal.querySelector('.modal-close')?.addEventListener('click', () => {
+    qrModal.classList.remove('open');
+  });
+
+  // Descargar vCard
+  const vcfBtn = document.getElementById('download-vcf-btn');
+  if (vcfBtn) {
+    vcfBtn.addEventListener('click', () => {
+      const vcard = [
+        'BEGIN:VCARD',
+        'VERSION:3.0',
+        'FN:Azul Ruiz',
+        'TEL;TYPE=CELL:+54 9 351 206-2487',
+        'EMAIL;TYPE=INTERNET:azulmartinaruizf@gmail.com',
+        'URL:https://www.linkedin.com/in/azul-ruiz',
+        'END:VCARD',
+      ].join('\r\n');
+      const blob = new Blob([vcard], { type: 'text/vcard' });
+      const url  = URL.createObjectURL(blob);
+      const a    = document.createElement('a');
+      a.href     = url;
+      a.download = 'Azul_Ruiz.vcf';
+      a.style.display = 'none';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      mostrarToast('Contacto guardado en .vcf');
     });
+  }
+}
 
-    // Cerrar al hacer clic fuera
-    document.addEventListener('click', function (e) {
-      if (!qrBtn.contains(e.target) && !qrModal.contains(e.target)) {
-        qrModal.classList.remove('open');
-      }
+function generarQR() {
+  if (qrGenerado) return;
+  const contenedor = document.getElementById('qr-code');
+  if (!contenedor) return;
+  if (!window.QRCode) {
+    contenedor.innerHTML = '<p class="text-xs text-gray-400">No se pudo cargar el generador QR.</p>';
+    return;
+  }
+  contenedor.innerHTML = '';
+  try {
+    new window.QRCode(contenedor, {
+      text: 'https://www.linkedin.com/in/azul-ruiz',
+      width: 160,
+      height: 160,
+      colorDark: '#1E3A8A',
+      colorLight: '#FFFFFF',
+      correctLevel: window.QRCode.CorrectLevel.M,
     });
-
-    // Descargar vCard
-    const downloadVcfBtn = document.getElementById('download-vcf-btn');
-    if (downloadVcfBtn) {
-      downloadVcfBtn.addEventListener('click', function () {
-        // Generar contenido vCard
-        const vcardContent = 'BEGIN:VCARD' + '\n' + 'VERSION:3.0' + '\n' + 'FN:Azul Ruiz' + '\n' + 'TEL;type=cell:+54 9 351 206-2487' + '\n' + 'EMAIL;type=internet:azulmartinaruizf@gmail.com' + '\n' + 'URL;type=text:https://www.linkedin.com/in/azul-ruiz' + '\n' + 'END:VCARD';
-
-        // Crear blob y desencadenar download
-        const blob = new Blob([vcardContent], { type: 'text/vcard' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'CV_Azul_Ruiz_Contacto.vcf';
-        a.style.display = 'none';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-
-        // Mostrar toast
-        mostrarToast('Contacto guardado en .vcf');
-      });
-    }
-  }
-
-  // Intersection Observer para animaciones
-  configurarIntersectionObserver();
-
-  // Navbar scroll
-  configurarNavbarScroll();
-}
-
-// ===========================================
-// APLICAR TEMA
-// ===========================================
-function aplicarTema(modo) {
-  const html = document.documentElement;
-  const body = document.body;
-
-  if (modo === 'dark') {
-    html.setAttribute('data-mode', 'dark');
-    body.classList.add('dark-mode');
-    // Guardar en localStorage
-    localStorage.setItem(tema.claveStorage, 'dark');
-    // Actualizar iconos
-    if (sunIcon) sunIcon.classList.add('hidden');
-    if (moonIcon) moonIcon.classList.remove('hidden');
-  } else {
-    html.removeAttribute('data-mode');
-    body.classList.remove('dark-mode');
-    // Guardar en localStorage
-    localStorage.setItem(tema.claveStorage, 'light');
-    // Actualizar iconos
-    if (sunIcon) sunIcon.classList.remove('hidden');
-    if (moonIcon) moonIcon.classList.add('hidden');
-  }
-}
-
-function guardarPreferenciaTema(modo) {
-  localStorage.setItem(tema.claveStorage, modo);
-  // Verificar si ya hay preferencia guardada
-  const temaGuardado = localStorage.getItem(tema.claveStorage);
-  if (temaGuardado) {
-    aplicarTema(temaGuardado);
-  }
-}
-
-// Cargar tema guardado al iniciar
-document.addEventListener('DOMContentLoaded', function () {
-  const temaGuardado = localStorage.getItem(tema.claveStorage);
-  if (temaGuardado) {
-    aplicarTema(temaGuardado);
-  } else {
-    aplicarTema(tema.modoPredeterminado);
-  }
-});
-
-// ===========================================
-// RENDERIZAR HERO SECTION
-// ===========================================
-function renderizarHero() {
-  const heroBadge = document.querySelector('.animate-pulse-badge');
-  const heroTitulo = document.querySelector('.hero-title');
-  const heroSubtitulo = document.querySelector('.hero-subtitle');
-  const cargoChips = document.querySelector('.cargo-chips');
-  const actionButtons = document.querySelector('.action-buttons');
-  const locationOverlay = document.querySelector('.location-overlay');
-
-  if (perfil) {
-    // Badge OpenToWork
-    if (heroBadge) {
-      heroBadge.innerHTML = `
-        <span class="flex items-center gap-1">
-          <i data-lucide="alert-circle" class="w-3 h-3" />
-          ${perfil.estado}
-        </span>
-      `;
-      lucide.createIcons();
-    }
-
-    // Título
-    if (heroTitulo) {
-      heroTitulo.textContent = perfil.nombre;
-    }
-
-    // Subtítulo
-    if (heroSubtitulo) {
-      heroSubtitulo.textContent = perfil.subtitulo;
-    }
-
-    // Chips de cargos
-    if (cargoChips) {
-      const chipsHTML = perfil.subtitulo.includes('Administrativo') ? `
-        <span class="chip-tag px-3 py-1.5 rounded-full text-xs font-medium bg-[var(--border-light)] text-[var(--text-primary)]">
-          Administrativo
-        </span>
-        <span class="chip-tag px-3 py-1.5 rounded-full text-xs font-medium bg-[var(--border-light)] text-[var(--text-primary)]">
-          Asistente Contable
-        </span>
-        <span class="chip-tag px-3 py-1.5 rounded-full text-xs font-medium bg-[var(--border-light)] text-[var(--text-primary)]">
-          Auxiliar Administrativo
-        </span>
-        <span class="chip-tag px-3 py-1.5 rounded-full text-xs font-medium bg-[var(--border-light)] text-[var(--text-primary)]">
-          Pasante
-        </span>
-        <span class="chip-tag px-3 py-1.5 rounded-full text-xs font-medium bg-[var(--border-light)] text-[var(--text-primary)]">
-          Recepcionista
-        </span>
-      ` : '';
-      cargoChips.innerHTML = chipsHTML;
-    }
-
-    // Botones de acción (ya están en HTML, solo nos aseguramos de que funcionen)
+    qrGenerado = true;
+  } catch (e) {
+    console.error('[QR]', e);
   }
 }
 
 // ===========================================
-// RENDERIZAR PORTAFOLIO
+// RENDERIZAR CATÁLOGO
 // ===========================================
 function renderizarPortafolio() {
-  const catalogoGrid = document.getElementById('catalogo-grid');
+  const grid = document.getElementById('catalogo-grid');
+  if (!grid || !PORTFOLIO_ITEMS) return;
 
-  if (!catalogoGrid || !PORTFOLIO_ITEMS) return;
+  const categoriaColores = {
+    'gestion-excel':      { bg: 'rgba(37,99,235,0.1)',   color: '#2563EB' },
+    'academico-economico':{ bg: 'rgba(16,185,129,0.1)',  color: '#10B981' },
+    'oratoria-liderazgo': { bg: 'rgba(139,92,246,0.1)', color: '#8B5CF6' },
+  };
 
-  // Guardar referencia global para filtros
-  window.PORTFOLIO_ITEMS = PORTFOLIO_ITEMS;
-
-  // Renderizar todos los items
-  const itemsHTML = PORTFOLIO_ITEMS.map((item, index) => {
-    const categoriaEtiqueta = item.etiqueta || 'Gestión y Excel';
-
-    // Determinar color de categoría
-    let categoriaBg, categoriaColor;
-    switch (item.categoria) {
-      case 'gestion-excel':
-        categoriaBg = 'rgba(39, 99, 235, 0.1)';
-        categoriaColor = '#2563EB';
-        break;
-      case 'academico-economico':
-        categoriaBg = 'rgba(16, 185, 129, 0.1)';
-        categoriaColor = '#10B981';
-        break;
-      case 'oratoria-liderazgo':
-        categoriaBg = 'rgba(139, 92, 246, 0.1)';
-        categoriaColor = '#8B5CF6';
-        break;
-      default:
-        categoriaBg = 'rgba(147, 197, 253, 0.1)';
-        categoriaColor = '#60A5FA';
-    }
-
+  const html = PORTFOLIO_ITEMS.map(item => {
+    const col = categoriaColores[item.categoria] || { bg: 'rgba(148,163,184,0.1)', color: '#64748B' };
     return `
-      <article class="catalogo-card group hover:border-emerald-500 hover:bg-emerald-50/20" tabindex="0" role="button" 
-               onclick="abrirModalPortafolio('${item.id}')"
-               style="border-color: var(--border-light); transition: all 0.3s ease;">
-        <div class="relative group-hover:after:absolute group-hover:after:bottom-0 group-hover:after:left-0 group-hover:after:w-full group-hover:after:h-0.5 group-hover:after:bg-[var(--accent-royal)] group-hover:after:transition-transform group-hover:after:duration-300">
-        </div>
-        <div class="flex flex-col h-full">
-          <span class="categoria ${item.categoria}" style="background: ${categoriaBg}; color: ${categoriaColor};">
-            ${item.etiqueta}
-          </span>
-          <h3 class="font-semibold text-[var(--text-primary)] mt-2 line-clamp-2">${item.titulo}</h3>
-          <p class="text-[var(--text-secondary)] text-sm line-clamp-3 flex-grow mt-2">${item.preview}</p>
-        </div>
-      </article>
-    `;
+      <article
+        class="catalogo-card flex flex-col h-full p-6 rounded-xl border border-[var(--border-light)] bg-[var(--bg-card)] cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-royal)]"
+        tabindex="0"
+        role="button"
+        aria-label="Ver detalles: ${item.titulo}"
+        data-id="${item.id}"
+        data-categoria="${item.categoria}"
+      >
+        <span
+          class="categoria ${item.categoria} inline-block text-xs font-medium px-2 py-0.5 rounded mb-3"
+          style="background:${col.bg};color:${col.color};"
+        >${item.etiqueta}</span>
+        <h3 class="font-semibold text-[var(--text-primary)] text-base leading-snug line-clamp-2 mb-2">${item.titulo}</h3>
+        <p class="text-[var(--text-secondary)] text-sm leading-relaxed line-clamp-3 flex-grow">${item.preview}</p>
+      </article>`;
   }).join('');
 
-  catalogoGrid.innerHTML = `<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">${itemsHTML}</div>`;
+  grid.innerHTML = html;
+
+  // Eventos de apertura de modal en tarjetas
+  grid.querySelectorAll('.catalogo-card').forEach(card => {
+    const abrir = () => abrirModalPortafolio(card.dataset.id);
+    card.addEventListener('click', abrir);
+    card.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); abrir(); } });
+  });
 }
 
+// ===========================================
+// FILTROS DEL CATÁLOGO
+// ===========================================
+function configurarFiltrosCatalogo() {
+  const chips = document.querySelectorAll('[data-category]');
+  chips.forEach(chip => {
+    chip.addEventListener('click', function () {
+      chips.forEach(c => c.classList.remove('selected'));
+      this.classList.add('selected');
+      filtrarPortafolio(this.dataset.category);
+    });
+  });
+}
+
+function filtrarPortafolio(categoria) {
+  const cards = document.querySelectorAll('#catalogo-grid .catalogo-card');
+  cards.forEach(card => {
+    const visible = categoria === 'todos' || card.dataset.categoria === categoria;
+    card.style.display = visible ? '' : 'none';
+  });
+}
+
+// ===========================================
+// MODAL DE PORTAFOLIO DINÁMICO
+// ===========================================
 function abrirModalPortafolio(itemId) {
   const item = PORTFOLIO_ITEMS.find(i => i.id === itemId);
   if (!item) return;
 
-  // Usar los datos del modal si existen, sino usar los principales
-  const modalTitulo = item.modal?.titulo || item.titulo;
-  const modalCategoria = item.modal?.categoria || item.categoria;
-  const modalVistaPrevia = item.modal?.vistaPrevia || item.preview;
-  const modalDescripcion = item.modal?.descripcion || '';
-  const modalTecnologias = item.modal?.tecnologias || [];
+  const m = item.modal || {};
+  const titulo      = m.titulo      || item.titulo;
+  const descripcion = m.descripcion || item.preview;
+  const techs       = (m.tecnologias || []).map(t =>
+    `<span class="modal-tag px-2 py-0.5 rounded text-xs font-medium bg-[var(--border-light)] text-[var(--text-primary)]">${t}</span>`
+  ).join('');
 
-  // Crear contenido del modal
-  const tecnologiasHTML = modalTecnologias.map(tech => `
-    <span class="modal-tag px-2 py-0.5 rounded text-xs font-medium bg-[var(--border-light)] text-[var(--text-primary)]">
-      ${tech}
-    </span>
-  `).join('');
+  // Eliminar modal previo si existe
+  document.querySelectorAll('.modal-dinamico').forEach(m => m.remove());
 
-  const modalHTML = `
-    <div class="modal-overlay open" role="dialog" aria-modal="true">
-      <div class="modal-content">
-        <button class="modal-close" aria-label="Cerrar modal" role="button">
-          <i data-lucide="x" class="w-4 h-4" />
-        </button>
-        <div class="modal-detail">
-          <h3>${modalTitulo}</h3>
-          <p class="text-[var(--text-secondary)] mb-4">${modalDescripcion}</p>
-          <div class="modal-tags mt-4">
-            ${tecnologiasHTML}
-          </div>
-        </div>
+  const wrapper = document.createElement('div');
+  wrapper.className = 'modal-dinamico modal-overlay open';
+  wrapper.setAttribute('role', 'dialog');
+  wrapper.setAttribute('aria-modal', 'true');
+  wrapper.setAttribute('aria-labelledby', 'modal-dyn-title');
+  wrapper.innerHTML = `
+    <div class="modal-content">
+      <button class="modal-close" aria-label="Cerrar modal">
+        <i data-lucide="x" class="w-4 h-4"></i>
+      </button>
+      <div class="modal-detail">
+        <h3 id="modal-dyn-title" class="text-xl font-bold text-[var(--text-primary)] mb-3">${titulo}</h3>
+        <p class="text-[var(--text-secondary)] text-sm leading-relaxed mb-4">${descripcion}</p>
+        <div class="modal-tags flex flex-wrap gap-2 mt-3">${techs}</div>
       </div>
-    </div>
-  `;
+    </div>`;
 
-  // Insertar y crear overlay
-  const existingOverlay = document.querySelector('.modal-overlay');
-  if (existingOverlay) {
-    existingOverlay.remove();
-  }
+  document.body.appendChild(wrapper);
+  refreshIcons();
 
-  const overlayDOM = document.createElement('div');
-  overlayDOM.innerHTML = modalHTML;
-  document.body.appendChild(overlayDOM);
-
-  // Re-inicializar Lucide
-  lucide.createIcons();
-
-  // Cerrar al hacer clic en overlay
-  const nuevoOverlay = document.querySelector('.modal-overlay');
-  if (nuevoOverlay) {
-    nuevoOverlay.addEventListener('click', function (e) {
-      if (e.target === nuevoOverlay || e.target.className.includes('modal-close')) {
-        nuevoOverlay.remove();
-      }
-    });
-  }
-}
-
-// ===========================================
-// RENDERIZAR CATálogo CON FILTROS
-// ===========================================
-function filtrarPortafolio(categoria) {
-  const items = document.querySelectorAll('.catalogo-card');
-
-  items.forEach(item => {
-    const itemCategoria = item.querySelector('.categoria')?.getAttribute('data-cat') || '';
-
-    if (categoria === 'todos' || itemCategoria === categoria || categoria === item.dataset.categoria) {
-      item.style.display = '';
-    } else {
-      item.style.display = 'none';
-    }
-  });
-
-  // Re-inicializar Lucide después de filtrar
-  lucide.createIcons();
+  wrapper.querySelector('.modal-close').addEventListener('click', () => wrapper.remove());
+  wrapper.addEventListener('click', e => { if (e.target === wrapper) wrapper.remove(); });
 }
 
 // ===========================================
 // RENDERIZAR SIMULADOR EXCEL
 // ===========================================
-function renderizarSimuladorExcel() {
-  const tablaBody = document.querySelector('#simulator tbody');
-  const totalElement = document.getElementById('total-calculado');
-  const auditadasElement = document.getElementById('prestaciones-auditadas');
-  const porcentajeElement = document.getElementById('porcentaje-control');
+const ESTADO_META = {
+  correcto:     { label: '✅ Pago correcto',     cls: 'text-emerald-600', filtro: 'correcto'     },
+  diferencia:   { label: '⚠️ Diferencia en PDF', cls: 'text-amber-600',   filtro: 'diferencia'   },
+  verificacion: { label: '🔍 En verificación',   cls: 'text-blue-600',    filtro: 'verificacion' },
+};
 
-  if (!tablaBody || !simuladorExcel) return;
+function renderizarSimulador() {
+  const tbody = document.querySelector('#simulator tbody');
+  if (!tbody || !simuladorExcel) return;
 
-  // Renderizar datos
-  const datos = simuladorExcel.datos;
-  const columnas = simuladorExcel.columnas;
+  const filas = simuladorExcel.datos.map(fila => {
+    const meta = ESTADO_META[fila.estado] || { label: fila.estado, cls: '', filtro: fila.estado };
+    return `
+      <tr class="border-b border-[var(--border-light)] hover:bg-[var(--border-light)]/30 transition-colors" data-estado="${fila.estado}">
+        <td class="p-3 text-sm font-medium text-[var(--text-primary)]">${fila.entidad}</td>
+        <td class="p-3 text-sm text-[var(--text-secondary)]">${fila.periodo}</td>
+        <td class="p-3 text-sm font-mono text-right">${fila.pacientes}</td>
+        <td class="p-3 text-sm font-mono text-right">${formatARS(fila.arancel)}</td>
+        <td class="p-3 text-sm font-mono text-right">${formatARS(fila.total_esperado)}</td>
+        <td class="p-3 text-sm font-mono text-right">${formatARS(fila.total_pdf)}</td>
+        <td class="p-3 text-sm font-medium ${meta.cls}">${meta.label}</td>
+      </tr>`;
+  }).join('');
 
-  // Limpiar y renderizar filas
-  let filasHTML = '';
-  let total = 0;
-  let auditadas = 0;
-
-  datos.forEach(fila => {
-    const subtotal = parseInt(fila.subtotal.replace('$', '').replace('.', '')) || 0;
-    total += subtotal;
-
-    let estadoTexto = 'Pendiente';
-    let estadoClase = '';
-
-    switch (fila.estado) {
-      case 'listo':
-        estadoTexto = 'Listo para Facturar';
-        estadoClase = 'state-listo';
-        auditadas++;
-        break;
-      case 'en-control':
-        estadoTexto = 'En Control';
-        estadoClase = 'state-en-control';
-        break;
-      case 'liquidado':
-        estadoTexto = 'Liquidado';
-        estadoClase = 'state-liquidado';
-        break;
-    }
-
-    filasHTML += `
-      <tr>
-        <td class="p-4 font-mono text-sm">${fila.codigo}</td>
-        <td class="p-4">${fila.entidad}</td>
-        <td class="p-4 font-mono text-sm">${fila.cantidad}</td>
-        <td class="p-4 font-mono text-sm">$ ${fila.arancel.toLocaleString()}</td>
-        <td class="p-4 font-mono text-sm">$ ${subtotal.toLocaleString()}</td>
-        <td class="p-4 ${estadoClase} rounded text-sm">${estadoTexto}</td>
-      </tr>
-    `;
-  });
-
-  tablaBody.innerHTML = filasHTML;
-
-  // Actualizar resúmenes
-  if (totalElement) totalElement.textContent = `$ ${total.toLocaleString()}`;
-  if (auditadasElement) auditadasElement.textContent = auditadas;
-  if (porcentajeElement) {
-    const totalRegistros = datos.length;
-    const porcentaje = totalRegistros > 0 ? Math.round((auditadas / totalRegistros) * 100) : 0;
-    porcentajeElement.textContent = `${porcentaje}%`;
-  }
+  tbody.innerHTML = filas;
+  actualizarResumenSimulador();
 }
 
-// Filtrar simulador por estado
-function filtrarSimuladorExcel(filtro) {
+function actualizarResumenSimulador(filtroActivo) {
   const filas = document.querySelectorAll('#simulator tbody tr');
+  let totalEsperado = 0;
+  let totalPDF      = 0;
+  let totalFilas    = 0;
+  let filasCorrecto = 0;
 
   filas.forEach(fila => {
-    const estadoCelda = fila.querySelector('td:last-child')?.textContent.toLowerCase() || '';
+    if (fila.style.display === 'none') return;
+    totalFilas++;
+    const celdas = fila.querySelectorAll('td');
+    if (celdas.length < 6) return;
 
-    if (filtro === 'all' || filtro === estadoCelda) {
-      fila.style.display = '';
-    } else {
-      fila.style.display = 'none';
-    }
+    const parseCell = (td) => {
+      const raw = td.textContent.replace(/[^0-9,]/g, '').replace(',', '.');
+      return parseFloat(raw) || 0;
+    };
+
+    totalEsperado += parseCell(celdas[4]);
+    totalPDF      += parseCell(celdas[5]);
+
+    if (fila.dataset.estado === 'correcto') filasCorrecto++;
   });
 
-  // Actualizar chips seleccionados
-  const chips = document.querySelectorAll('.filter-chip');
-  chips.forEach(chip => chip.classList.remove('selected'));
-  // Re-encontrar el chip correcto (necesitaríamos referenciarlo, simplificamos)
+  const diferencia = totalPDF - totalEsperado;
+  const pctCorrecto = totalFilas > 0 ? Math.round((filasCorrecto / totalFilas) * 100) : 0;
+
+  const setEl = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+  setEl('total-esperado',   formatARS(totalEsperado));
+  setEl('total-informado',  formatARS(totalPDF));
+  setEl('total-diferencia', formatARS(diferencia));
+  setEl('pct-correcto',     pctCorrecto + '%');
 }
 
-// Filtrar por búsqueda
-function filtrarPorBusqueda(termino) {
+// ===========================================
+// FILTROS DEL SIMULADOR
+// ===========================================
+function configurarFiltrosSimulador() {
+  const chips = document.querySelectorAll('[data-filter]');
+  chips.forEach(chip => {
+    chip.addEventListener('click', function () {
+      chips.forEach(c => c.classList.remove('selected'));
+      this.classList.add('selected');
+      filtrarSimulador(this.dataset.filter);
+    });
+  });
+}
+
+function filtrarSimulador(filtro) {
   const filas = document.querySelectorAll('#simulator tbody tr');
-
   filas.forEach(fila => {
-    const textoFila = fila.textContent.toLowerCase();
-    if (textoFila.includes(termino.toLowerCase())) {
-      fila.style.display = '';
-    } else {
-      fila.style.display = 'none';
-    }
+    const visible = filtro === 'all' || fila.dataset.estado === filtro;
+    fila.style.display = visible ? '' : 'none';
   });
-
-  // Re-inicializar íconsos después de filtrar
-  lucide.createIcons();
+  actualizarResumenSimulador(filtro);
 }
 
-// ===========================================
-// RENDERIZAR EDUCACIÓN
-// ===========================================
-function renderizarEducacion() {
-  const lineaTiempo = document.querySelector('.linea-tiempo');
-
-  if (!lineaTiempo || !educacion) return;
-
-  educacion.forEach((item, index) => {
-    const puntoHTML = `
-      <div class="linea-tiempo" style="left: ${index * 33}%;">
-        <div class="absolute -top-1/2 -left-1/2 w-12 h-12 rounded-full bg-[var(--bg-card)] border border-[var(--border-light)] flex items-center justify-center">
-          <i data-lucide="graduation-cap" class="w-5 h-5 text-[var(--accent-royal)]" />
-        </div>
-        ${index === 0 ? `
-          <div class="relative pt-8">
-            <div class="flex justify-between items-start mb-3">
-              <h3 class="text-xl font-semibold text-[var(--text-primary)]">${item.institucion}</h3>
-              <span class="text-sm text-[var(--accent-royal)]">${item.titulo}</span>
-            </div>
-            <p class="text-[var(--text-secondary)] text-sm">
-              ${item.fecha}
-            </p>
-            <p class="text-[var(--text-secondary)] text-xs">
-              ${item.descripcion}
-            </p>
-          </div>
-        ` : ''}
-        ${index === educacion.length - 1 ? `
-          <div class="relative pt-8">
-            <div class="flex justify-between items-start mb-3">
-              <h3 class="text-xl font-semibold text-[var(--text-primary)]">${item.institucion}</h3>
-              <span class="text-sm">${item.nivel}</span>
-            </div>
-            <p class="text-[var(--text-secondary)] text-sm">
-              ${item.fecha}
-            </p>
-            <p class="text-[var(--text-secondary)] text-xs">
-              ${item.descripcion}
-            </p>
-          </div>
-        ` : ''}
-      </div>
-    `;
-
-    lineaTiempo.insertAdjacentHTML('beforeend', puntoHTML);
+function filtrarSimuladorPorBusqueda(termino) {
+  const filas = document.querySelectorAll('#simulator tbody tr');
+  filas.forEach(fila => {
+    const match = fila.textContent.toLowerCase().includes(termino);
+    fila.style.display = match ? '' : 'none';
   });
-
-  // Re-inicializar Lucide
-  lucide.createIcons();
+  actualizarResumenSimulador();
 }
 
 // ===========================================
-// RENDERIZAR HABILidades
-// ===========================================
-function renderizarHabilidades() {
-  const habilidadGrid = document.querySelector('.habilidades-grid');
-
-  if (!habilidadGrid || !habilidades) return;
-
-  // Herramientas
-  const herramientasHTML = habilidades.herramientas.map((herramienta, index) => `
-    <span class="habilidad-chip" style="background: var(--bg-card); border-color: var(--border-light); color: var(--text-primary);">
-      ${herramienta.nombre}
-    </span>
-  `).join('');
-
-  // Competencias
-  const competenciasHTML = habilidades.competencias.map(competencia => `
-    <span class="habilidad-chip" style="background: var(--bg-card); border-color: var(--border-light); color: var(--text-primary);">
-      ${competencia}
-    </span>
-  `).join('');
-
-  // Idiomas
-  const idiomasHTML = habilidades.idiomas.map(idioma => `
-    <div class="mb-3">
-      <span class="font-medium text-[var(--text-primary)]">${idioma.idioma}</span>
-      <span class="text-[var(--accent-emerald)] font-medium">${idioma.nivel}</span>
-    </div>
-  `).join('');
-
-  habilidadGrid.innerHTML = `
-    <div>
-      <div>${herramientasHTML}</div>
-      <div>${competenciasHTML}</div>
-    </div>
-    <div>
-      ${idiomasHTML}
-    </div>
-  `;
-
-  // Re-inicializar Lucide
-  lucide.createIcons();
-}
-
-// ===========================================
-// CONFIGURAR INTERSECTION OBSERVER
+// INTERSECTION OBSERVER (con fallbacks)
 // ===========================================
 function configurarIntersectionObserver() {
-  const elementosReveal = document.querySelectorAll('.reveal');
+  const elementos = document.querySelectorAll('.reveal');
+  if (!elementos.length) return;
+
+  // Si no hay soporte, mostrar todo
+  if (!('IntersectionObserver' in window)) {
+    elementos.forEach(el => el.classList.add('visible'));
+    return;
+  }
+
+  // Respetar prefers-reduced-motion
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reducedMotion) {
+    elementos.forEach(el => el.classList.add('visible'));
+    return;
+  }
 
   const observer = new IntersectionObserver(
     (entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
         }
       });
     },
-    {
-      threshold: 0.1,
-      rootMargin: '0px 0px -50px 0px',
-    }
+    { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
   );
 
-  elementosReveal.forEach(elemento => {
-    observer.observe(elemento);
-  });
+  elementos.forEach(el => observer.observe(el));
 }
 
 // ===========================================
-// CONFIGURAR NAVBAR SCROLL
+// NAVBAR SCROLL
 // ===========================================
 function configurarNavbarScroll() {
   const navbar = document.getElementById('navbar');
-
   if (!navbar) return;
-
   let lastScroll = 0;
-
-  window.addEventListener('scroll', function () {
-    const currentScroll = window.pageYOffset;
-
-    if (currentScroll > lastScroll && currentScroll > 100) {
-      // Scroll hacia abajo - ocultar navbar
-      navbar.style.transform = 'translateY(-100%)';
-    } else {
-      // Scroll hacia arriba - mostrar navbar
-      navbar.style.transform = 'translateY(0)';
-    }
-
-    lastScroll = currentScroll;
-  });
+  window.addEventListener('scroll', () => {
+    const cur = window.pageYOffset;
+    navbar.style.transform = (cur > lastScroll && cur > 80) ? 'translateY(-100%)' : 'translateY(0)';
+    lastScroll = cur;
+  }, { passive: true });
 }
 
 // ===========================================
 // TOAST NOTIFICATION
 // ===========================================
-function mostrarToast(mensaje) {
-  const toast = document.getElementById('toast');
+function mostrarToast(msg) {
+  const toast        = document.getElementById('toast');
   const toastMessage = document.getElementById('toast-message');
-
-  if (toast && toastMessage) {
-    toastMessage.textContent = mensaje;
-    toast.classList.add('show');
-
-    // Auto-ocultar después de 3 segundos
-    setTimeout(() => {
-      toast.classList.remove('show');
-    }, 3000);
-  }
+  if (!toast || !toastMessage) return;
+  toastMessage.textContent = msg;
+  toast.classList.add('show');
+  setTimeout(() => ocultarToast(), 3500);
 }
 
-// Cerrar modal
-function cerrarModal(overlay) {
-  if (overlay) {
-    overlay.remove();
-  }
+function ocultarToast() {
+  const toast = document.getElementById('toast');
+  if (toast) toast.classList.remove('show');
 }
