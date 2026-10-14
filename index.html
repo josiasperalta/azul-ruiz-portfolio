@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="es" dir="ltr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Portafolio ejecutivo de Azul Ruiz - Contador Público en formación, especializada en control de cobros Excel, administración y gestión administrativa. OpenToWork disponible para pasantías y empleo administrativo/contable en Córdoba Capital.">
+    <meta name="keywords" content="Azul Ruiz, portafolio, contador público, Excel, control de cobros, finanzas, administración, Córdoba, UNC, OpenToWork">
+    <meta name="author" content="Azul Ruiz">
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%2285%22 font-size=%2290%22>🅐</text></svg>">
+
+    <title>Azul Ruiz - Portafolio Ejecutivo Contador Público</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Instrument+Serif:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+    <!-- Tailwind CSS via CDN with custom palette -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Lucide Icons -->
+    <script defer src="https://unpkg.com/lucide@latest/dist/ionicons/ lucide.min.js"></script>
+
+    <!-- Custom CSS (inline critical, rest in styles.css) -->
+    <style>
+      :root {
+        --bg-primary: #F8FAFC;
+        --bg-card: #FFFFFF;
+        --bg-dark: #0B0F19;
+        --bg-dark-card: #111827;
+        --text-primary: #0F172A;
+        --text-secondary: #475569;
+        --accent-navy: #1E3A8A;
+        --accent-royal: #2563EB;
+        --accent-emerald: #10B981;
+        --border-light: #E2E8F0;
+        --border-dark: #1E293B;
+        --muted: #64748B;
+      }
+
+      .light-mode * {
+        color-scheme: light;
+      }
+
+      .dark-mode {
+        --bg-primary: #0B0F19;
+        --bg-card: #111827;
+        --text-primary: #F8FAFC;
+        --text-secondary: #F1F5F9;
+        --accent-navy: #3B82F6;
+        --accent-royal: #60A5FA;
+        --border-dark: #374151;
+        --border-light: #1E293B;
+      }
+
+      body {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        background-color: var(--bg-primary);
+        color: var(--text-primary);
+        overflow-x: hidden;
+      }
+
+      .font-serif {
+        font-family: 'Instrument Serif', serif;
+      }
+
+      /* Scrollbar personalizado */
+      ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      ::-webkit-scrollbar-thumb {
+        background-color: var(--border-light);
+        border-radius: 4px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background-color: var(--accent-emerald);
+      }
+
+      /* Glassmorphism navbar */
+      .glass-nav {
+        backdrop-filter: blur(20px);
+        background: rgba(248, 250, 252, 0.8);
+        border-bottom: 1px solid var(--border-light);
+      }
+
+      .dark-mode .glass-nav {
+        background: rgba(11, 15, 25, 0.8);
+        border-bottom-color: var(--border-dark);
+      }
+
+      /* Hero section styles */
+      .hero-badge {
+        animation: pulse-soft 2s ease-in-out infinite;
+      }
+
+      @keyframes pulse-soft {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.8; }
+      }
+
+      /* Bento grid */
+      .bento-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+      .bento-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+      }
+      .dark-mode .bento-card:hover {
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+      }
+
+      /* Filter chips */
+      .filter-chip {
+        transition: all 0.2s ease;
+      }
+      .filter-chip.selected {
+        background-color: var(--accent-royal);
+        color: white;
+      }
+      .filter-chip.selected::after {
+        opacity: 1;
+      }
+
+      /* Modal styles */
+      .modal-overlay {
+        background: rgba(0, 0, 0, 0.7);
+      }
+      .modal-content {
+        background: var(--bg-card);
+        border: 1px solid var(--border-light);
+      }
+      .dark-mode .modal-content {
+        border-color: var(--border-dark);
+      }
+
+      /* Toast notification */
+      .toast-active {
+        animation: toast-in 0.3s ease-out;
+      }
+      @keyframes toast-in {
+        from { opacity: 0; transform: translateY(-10px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+
+      /* Intersection Observer animations */
+      .reveal {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: opacity 0.6s ease, transform 0.6s ease;
+      }
+      .reveal.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      /* Reduced motion */
+      @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+        }
+      }
+    </style>
+  </head>
+  <body class="min-h-screen antialiased">
+    
+    <!-- Navbar Flotante Glassmorphism -->
+    <nav class="glass-nav fixed top-0 left-0 right-0 z-50 transition-all duration-300" id="navbar">
+      <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+        <!-- Logo -->
+        <div class="flex items-center gap-2">
+          <i data-lucide="grid" class="w-6 h-6 text-[var(--accent-navy)]" />
+          <span class="text-sm font-medium tracking-wider text-[var(--accent-navy)]">AR | Azul Ruiz</span>
+        </div>
+
+        <!-- Enlaces de navegación -->
+        <div class="hidden md:flex items-center gap-8">
+          <a href="#about" class="text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors text-sm font-medium">Sobre Mí</a>
+          <a href="#experience" class="text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors text-sm font-medium">Experiencia</a>
+          <a href="#simulator" class="text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors text-sm font-medium">Simulador Excel</a>
+          <a href="#catalogo" class="text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors text-sm font-medium">Catálogo</a>
+          <a href="#education" class="text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors text-sm font-medium">Educación</a>
+          <a href="#contacto" class="text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors text-sm font-medium">Contacto</a>
+        </div>
+
+        <!-- Toggle Dark/Light Mode y CTA -->
+        <div class="flex items-center gap-3">
+          <button id="theme-toggle" class="p-2 rounded-lg hover:bg-[var(--border-light)] transition-colors" aria-label="Cambiar modo oscuro/claro">
+            <i data-lucide="sun" class="w-5 h-5 text-[var(--accent-emerald)]" id="sun-icon" />
+            <i data-lucide="moon" class="w-5 h-5 text-[var(--accent-emerald)] hidden" id="moon-icon" />
+          </button>
+          <!-- Nueva: Tarjeta QR / vCard -->
+          <button id="qr-btn" class="p-2 rounded-lg hover:bg-[var(--border-light)] transition-colors relative" aria-label="Tarjeta QR y contacto">
+            <i data-lucide="zap" class="w-5 h-5 text-[var(--accent-royal)]" />
+          </button>
+          <a href="mailto:azulmartinaruizf@gmail.com" class="btn-cta text-sm font-medium">
+            <i data-lucide="mail" class="w-4 h-4 mr-1" />
+            Contactar
+          </a>
+        </div>
+      </div>
+
+      <!-- Menú móvil -->
+      <div class="md:hidden hidden border-t border-[var(--border-light)] mt-8">
+        <a href="#about" class="block padding px-6 hover:bg-[var(--bg-card)] text-[var(--text-primary)]">Sobre Mí</a>
+        <a href="#experience" class="block padding px-6 hover:bg-[var(--bg-card)] text-[var(--text-primary)]">Experiencia</a>
+        <a href="#simulator" class="block padding px-6 hover:bg-[var(--bg-card)] text-[var(--text-primary)]">Simulador Excel</a>
+        <a href="#catalogo" class="block padding px-6 hover:bg-[var(--bg-card)] text-[var(--text-primary)]">Catálogo</a>
+        <a href="#education" class="block padding px-6 hover:bg-[var(--bg-card)] text-[var(--text-primary)]">Educación</a>
+        <a href="#contacto" class="block padding px-6 hover:bg-[var(--bg-card)] text-[var(--text-primary)]">Contacto</a>
+      </div>
+    </nav>
+
+    <!-- Modal Tarjeta QR -->
+    <div id="qr-modal" class="modal-overlay" role="dialog" aria-modal="true">
+      <div class="modal-content">
+        <button class="modal-close" aria-label="Cerrar modal" role="button">
+          <i data-lucide="x" class="w-4 h-4" />
+        </button>
+        <div class="qr-modal-content">
+          <img src="assets/foto-azul.jpg" alt="Foto de perfil Azul Ruiz" class="qr-photo rounded-2xl mb-8" />
+          <div class="qr-info text-center">
+            <h3 class="font-bold text-[var(--text-primary)] mb-2">Azul Ruiz</h3>
+            <p class="text-[var(--text-secondary)] mb-4">Estudiante de Contador Público (UNC)</p>
+            <a href="https://www.linkedin.com/in/azul-ruiz" target="_blank" class="qr-qrlink text-[var(--accent-royal)] hover:text-[var(--accent-navy)] transition-colors mb-4">
+              <i data-lucide="linkedin" class="w-4 h-4 mr-2" />
+              linkedin.com/in/azul-ruiz
+            </a>
+            <button id="download-vcf-btn" class="btn-outline-emerald w-auto px-4 py-2 mt-6">
+              <i data-lucide="file-text" class="w-4 h-4 mr-1" />
+              Agendar Contacto (.vcf)
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="min-h-screen relative flex items-center justify-center px-6 py-20 md:py-32">
+      <div class="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <!-- Columna izquierda -->
+        <div>
+          <!-- Badge OpenToWork -->
+          <div class="flex items-center gap-2 mb-6">
+            <span class="px-3 py-1 rounded-full text-xs font-medium bg-[var(--accent-emerald)] text-white animate-pulse-badge">#OpenToWork</span>
+            <span class="text-sm text-[var(--text-secondary)]">Disponible para primer empleo o pasantía</span>
+          </div>
+
+          <!-- Título principal -->
+          <h1 class="text-5xl md:text-7xl lg:text-8xl font-bold leading-tight tracking-tight mb-4">
+            Azul Ruiz
+          </h1>
+
+          <!-- Subtítulo -->
+          <p class="text-xl md:text-2xl text-[var(--text-secondary)] max-w-lg mb-8 line-height-relax">
+            Estudiante de Contador Público (UNC) | Excel · Control de cobros · Administración
+          </p>
+
+          <!-- Chips de cargos buscados -->
+          <div class="flex flex-wrap gap-3 mb-10">
+            <span class="chip-tag px-3 py-1.5 rounded-full text-xs font-medium bg-[var(--border-light)] text-[var(--text-primary)]">
+              Administrativo
+            </span>
+            <span class="chip-tag px-3 py-1.5 rounded-full text-xs font-medium bg-[var(--border-light)] text-[var(--text-primary)]">
+              Asistente Contable
+            </span>
+            <span class="chip-tag px-3 py-1.5 rounded-full text-xs font-medium bg-[var(--border-light)] text-[var(--text-primary)]">
+              Auxiliar Administrativo
+            </span>
+            <span class="chip-tag px-3 py-1.5 rounded-full text-xs font-medium bg-[var(--border-light)] text-[var(--text-primary)]">
+              Pasante
+            </span>
+            <span class="chip-tag px-3 py-1.5 rounded-full text-xs font-medium bg-[var(--border-light)] text-[var(--text-primary)]">
+              Recepcionista
+            </span>
+          </div>
+
+          <!-- Botones de acción -->
+          <div class="flex flex-wrap gap-4 mb-8">
+            <a href="#catalogo" class="btn-action px-6 py-3 rounded-full text-sm font-medium bg-[var(--accent-royal)] text-white hover:bg-[var(--accent-navy)] transition-colors">
+              <i data-lucide="grid" class="w-4 h-4 mr-2" />
+              Ver Catálogo y Gestión
+            </a>
+            <a href="https://www.linkedin.com/in/azul-ruiz" target="_blank" class="btn-action-outline px-6 py-3 rounded-full text-sm font-medium border border-[var(--border-light)] hover:border-[var(--accent-royal)] hover:text-[var(--accent-royal)] transition-colors">
+              <i data-lucide="linkedin" class="w-4 h-4 mr-2" />
+              LinkedIn
+            </a>
+            <a href="tel:+5493512062487" class="btn-action-outline px-6 py-3 rounded-full text-sm font-medium border border-[var(--border-light)] hover:border-[var(--accent-emerald)] hover:text-[var(--accent-emerald)] transition-colors">
+              <i data-lucide="phone" class="w-4 h-4 mr-2" />
+              WhatsApp
+            </a>
+          </div>
+
+          <!-- Menú desplegable Descargar CV -->
+          <div class="group">
+            <button id="cv-dropdown-btn" class="flex items-center gap-2 px-6 py-3 rounded-full text-sm font-medium bg-white border border-[var(--border-light)] hover:border-transparent bg-opacity-90 transition-all dropdown-toggle">
+              <i data-lucide="file-text" class="w-4 h-4" />
+              Descargar CV
+              <i data-lucide="chevron-down" class="w-3 h-3 transition-transform" />
+            </button>
+            <div id="cv-dropdown" class="absolute right-0 mt-2 w-48 rounded-lg shadow-lg bg-[var(--bg-card)] border border-[var(--border-light)] hidden min-w-[160px] z-10">
+              <div class="p-4 text-sm text-[var(--text-secondary)]">
+                <a href="assets/CV_Azul_Ruiz_Virtual.pdf" target="_blank" class="block text-[var(--text-primary)] hover:text-[var(--accent-royal)] mb-2 flex items-center gap-2">
+                  <i data-lucide="file-text" class="w-4 h-4" />
+                  Versión Virtual / ATS
+                </a>
+                <a href="assets/CV_Azul_Ruiz_Impresion.pdf" download="CV_Azul_Ruiz_Impresion.pdf" class="block text-[var(--text-primary)] hover:text-[var(--accent-emerald)] mb-2 flex items-center gap-2">
+                  <i data-lucide="file" class="w-4 h-4" />
+                  Versión Impresión / Diseño
+                </a>
+                <p class="text-[var(--muted)] text-xs mt-3">Haz clic para descargar</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Columna derecha - Foto con marco editorial -->
+        <div class="relative">
+          <img 
+            src="assets/foto-azul.jpg" 
+            alt="Foto de perfil de Azul Ruiz - estudiante de Contador Público" 
+            class="relative w-full h-auto rounded-2xl aspect-[4/5] object-cover shadow-2xl transition-shadow"
+          />
+          <!-- Overlay con información -->
+          <div class="absolute -bottom-4 -left-4 flex items-center gap-3 bg-[var(--bg-card)] border border-[var(--border-light)] rounded-xl p-4 shadow-xl dark-mode:dark-mode:bg-[var(--bg-dark-dark)] dark-mode:dark-mode:border-[var(--border-dark)]">
+            <div class="flex items-center gap-2">
+              <i data-lucide="map-pin" class="w-4 h-4 text-[var(--accent-emerald)]" />
+              <span class="text-sm text-[var(--text-secondary)]">Córdoba Capital</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <i data-lucide="calendar" class="w-4 h-4 text-[var(--accent-emerald)]" />
+              <span class="text-sm text-[var(--text-secondary)]">Presencial / Remoto</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sección Propuesta de Valor y Perfil (Bento Grid) -->
+    <section id="propuesta" class="py-24 px-6 max-w-7xl mx-auto">
+      <div class="max-w-7xl mx-auto">
+        <h2 class="text-3xl md:text-4xl font-bold text-[var(--text-primary)] mb-12 text-center reveal">
+          Mis Pilares Fundamentales
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 reveal" style="transition-delay: 0.1s;">
+          <!-- Tarjeta Precisión con los Números -->
+          <div class="bento-card p-6 rounded-2xl border border-[var(--border-light)] bg-[var(--bg-card)] reveal" style="transition-delay: 0.1s;">
+            <div class="w-12 h-12 rounded-xl bg-[var(--border-light)] flex items-center justify-center mb-4">
+              <i data-lucide="matrix" class="w-6 h-6 text-[var(--accent-emerald)]" />
+            </div>
+            <h3 class="text-xl font-semibold text-[var(--text-primary)] mb-2">Precisión con los Números</h3>
+            <p class="text-[var(--text-secondary)] text-sm leading-relaxed">
+              Dominio del cálculo numérico aplicado a control de cobros, liquidaciones y conciliación de estados financieros con prolijidad analítica.
+            </p>
+          </div>
+
+          <!-- Tarjeta Gestión en Excel -->
+          <div class="bento-card p-6 rounded-2xl border border-[var(--border-light)] bg-[var(--bg-card)] reveal" style="transition-delay: 0.2s;">
+            <div class="w-12 h-12 rounded-xl bg-[var(--border-light)] flex items-center justify-center mb-4">
+              <i data-lucide="zap" class="w-6 h-6 text-[var(--accent-royal)]" />
+            </div>
+            <h3 class="text-xl font-semibold text-[var(--text-primary)] mb-2">Gestión en Excel</h3>
+            <p class="text-[var(--text-secondary)] text-sm leading-relaxed">
+              Experiencia práctica en creación de planillas de control, fórmulas avanzadas y automatización de reportes para obras sociales y prepagas.
+            </p>
+          </div>
+
+          <!-- Tarjeta Comunicación y Negociación -->
+          <div class="bento-card p-6 rounded-2xl border border-[var(--border-light)] bg-[var(--bg-card)] reveal" style="transition-delay: 0.3s;">
+            <div class="w-12 h-12 rounded-xl bg-[var(--border-light)] flex items-center justify-center mb-4">
+              <i data-lucide="message-circle" class="w-6 h-6 text-[var(--accent-navy)]" />
+            </div>
+            <h3 class="text-xl font-semibold text-[var(--text-primary)] mb-2">Comunicación y Negociación</h3>
+            <p class="text-[var(--text-secondary)] text-sm leading-relaxed">
+              Participación en modelo de Naciones Unidas, investigación de posturas oficiales y negociación de proyectos de resolución con otras delegaciones.
+            </p>
+          </div>
+
+          <!-- Tarjeta Autonomía y Compromiso -->
+          <div class="bento-card p-6 rounded-2xl border border-[var(--border-light)] bg-[var(--bg-card)] reveal" style="transition-delay: 0.4s;">
+            <div class="w-12 h-12 rounded-xl bg-[var(--border-light)] flex items-center justify-center mb-4">
+              <i data-lucide="star" class="w-6 h-6 text-[var(--accent-emerald)]" />
+            </div>
+            <h3 class="text-xl font-semibold text-[var(--text-primary)] mb-2">Autonomía y Compromiso</h3>
+            <p class="text-[var(--text-secondary)] text-sm leading-relaxed">
+              Trabajo autónomo sostenido, adaptación horaria al cursado universitario y compromiso constante con la excelencia en cada tarea administrativa.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sección Experiencia + Flujo de Trabajo Interactivo -->
+    <section id="experience" class="py-24 px-6 bg-[var(--bg-primary)] reveal">
+      <div class="max-w-7xl mx-auto">
+        <!-- Flecha direccional -->
+        <div class="flex items-center gap-4 mb-12 reveal">
+          <i data-lucide="chevron-down" class="w-8 h-8 text-[var(--accent-emerald)]" />
+          <span class="text-lg font-medium text-[var(--text-secondary)]">
+            Trayectoria Profesional
+          </span>
+        </div>
+
+        <!-- Subtítulo -->
+        <p class="text-[var(--text-secondary)] text-lg mb-16 max-w-2xl reveal" style="transition-delay: 0.1s;">
+          Como Asistente Administrativa en Consultorio Médico (Familiar) desde octubre de 2025, he desarrollado competencias clave en gestión administrativa y control de cobros, integrando herramientas tecnológicas para optimizar procesos financieros del consultorio.
+        </p>
+
+        <!-- Responsabilidades -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl reveal" style="transition-delay: 0.2s;">
+          <div>
+            <h3 class="text-2xl font-bold text-[var(--text-primary)] mb-4">Responsabilidades Clave</h3>
+            <ul class="space-y-3 text-[var(--text-secondary)]">
+              <li class="pb-2 border-b border-[var(--border-light)] last:pb-0">
+                <span class="font-medium text-[var(--text-primary)]">Cálculo en Excel:</span> reviso la planilla de turnos del consultorio e identifico los pacientes efectivamente atendidos.
+              </li>
+              <li class="pb-2 border-b border-[var(--border-light)] last:pb-0">
+                <span class="font-medium text-[var(--text-primary)]">Organización de planillas:</span> control de cobros y trabajo autónomo sostenido.
+              </li>
+              <li class="pb-2 border-b border-[var(--border-light)] last:pb-0">
+                <span class="font-medium text-[var(--text-primary)]">Generación de reportes:</span> entregables claros y depurados para el profesional médico.
+              </li>
+              <li class="pb-2 border-b border-[var(--border-light)] last:pb-0">
+                <span class="font-medium text-[var(--text-primary)]">Control de estados:</span> seguimiento de Prestaciones (Pendiente, Liquidado, Listo para Facturar).
+              </li>
+            </ul>
+          </div>
+
+          <!-- Flujo de 4 Etapas -->
+          <div>
+            <h3 class="text-2xl font-bold text-[var(--text-primary)] mb-4">Flujo de Proceso Administrativo en 4 Etapas</h3>
+            <div class="space-y-4">
+              <div class="p-4 rounded-xl bg-[var(--bg-card)] border border-[var(--border-light)] reveal">
+                <h4 class="font-semibold text-[var(--text-primary)] mb-1">1. Planilla de Turnos</h4>
+                <p class="text-[var(--text-secondary)] text-sm">Revisión de turnos e identificación de los pacientes efectivamente atendidos.</p>
+              </div>
+              <div class="p-4 rounded-xl bg-[var(--bg-card)] border border-[var(--border-light)] reveal" style="transition-delay: 0.1s;">
+                <h4 class="font-semibold text-[var(--text-primary)] mb-1">2. Registro Diario y Mensual (Excel)</h4>
+                <p class="text-[var(--text-secondary)] text-sm">Conteo y organización en Excel de pacientes atendidos por día y por mes según obra social y prepaga (APROSS, Nobis y otras).</p>
+              </div>
+              <div class="p-4 rounded-xl bg-[var(--bg-card)] border border-[var(--border-light)] reveal" style="transition-delay: 0.2s;">
+                <h4 class="font-semibold text-[var(--text-primary)] mb-1">3. Recepción de Liquidación en PDF</h4>
+                <p class="text-[var(--text-secondary)] text-sm">Lectura de los reportes de pago enviados por cada entidad.</p>
+              </div>
+              <div class="p-4 rounded-xl bg-[var(--bg-card)] border border-[var(--border-light)] reveal" style="transition-delay: 0.3s;">
+                <h4 class="font-semibold text-[var(--text-primary)] mb-1">4. Verificación de Cobros y Aranceles</h4>
+                <p class="text-[var(--text-secondary)] text-sm">Control de que los importes informados en el PDF sean correctos, considerando que cada obra social y prepaga paga un valor distinto.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Componente Estrella: Vista Previa Interactiva de Planilla de Control (DEMO) -->
+    <section id="simulator" class="py-24 px-6 bg-[var(--bg-primary)] reveal">
+      <div class="max-w-7xl mx-auto">
+        <div class="mb-12 reveal">
+          <h2 class="text-3xl md:text-4xl font-bold text-[var(--text-primary)] mb-6">
+            Vista Previa Interactiva de Planilla de Control (Demo)
+          </h2>
+          <p class="text-[var(--text-secondary)] text-lg max-w-2xl">
+            Demostración interactiva con valores simulados que replica la estructura lógica de control de cobros utilizada en Excel. Filtrar por estado y ver cómo se recalculan los resúmenes automáticamente.
+          </p>
+        </div>
+
+        <!-- Filtros -->
+        <div class="mb-8 reveal" style="transition-delay: 0.1s;">
+          <div class="flex flex-wrap gap-2">
+            <button class="filter-chip px-4 py-2 rounded-full text-sm font-medium bg-[var(--bg-card)] border border-[var(--border-light)] text-[var(--text-primary)] selected" data-filter="all">Todos</button>
+            <button class="filter-chip px-4 py-2 rounded-full text-sm font-medium bg-[var(--bg-card)] border border-[var(--border-light)] text-[var(--text-primary)]" data-filter="listo">Listo para Facturar</button>
+            <button class="filter-chip px-4 py-2 rounded-full text-sm font-medium bg-[var(--bg-card)] border border-[var(--border-light)] text-[var(--text-primary)]" data-filter="en-control">En Control</button>
+            <button class="filter-chip px-4 py-2 rounded-full text-sm font-medium bg-[var(--bg-card)] border border-[var(--border-light)] text-[var(--text-primary)]" data-filter="liquidado">Liquidado</button>
+            <input type="text" id="search-input" class="px-4 py-2 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[var(--accent-royal)] transition-colors" placeholder="Buscar..." aria-label="Buscar en la tabla">
+          </div>
+        </div>
+
+        <!-- Tabla de control de cobros -->
+        <div class="overflow-x-auto reveal" style="transition-delay: 0.2s;">
+          <table class="w-full min-w-[800px] border-collapse">
+            <thead>
+              <tr class="bg-[var(--bg-card)] border-b border-[var(--border-light)]">
+                <th class="p-4 text-left text-xs font-medium text-[var(--text-secondary)] uppercase tracking-wider">Obra Social / Prepaga</th>
+                <th class="p-4 text-left text-xs font-medium text-[var(--text-secondary)] uppercase tracking-wider">Período (Mes / Día)</th>
+                <th class="p-4 text-left text-xs font-medium text-[var(--text-secondary)] uppercase tracking-wider">Pacientes Atendidos (Turnos)</th>
+                <th class="p-4 text-left text-xs font-medium text-[var(--text-secondary)] uppercase tracking-wider">Arancel Unitario (según entidad)</th>
+                <th class="p-4 text-left text-xs font-medium text-[var(--text-secondary)] uppercase tracking-wider">Total Esperado (Excel)</th>
+                <th class="p-4 text-left text-xs font-medium text-[var(--text-secondary)] uppercase tracking-wider">Total Informado (Liquidación PDF)</th>
+                <th class="p-4 text-left text-xs font-medium text-[var(--text-secondary)] uppercase tracking-wider">Estado de Control</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Filas de muestra - datos simulados/anonimizados -->
+              <tr class="border-b border-[var(--border-light)] hover:bg-[var(--bg-card)] transition-colors">
+                <td class="p-4 font-mono text-sm">PRAC-001</td>
+                <td class="p-4">APROSS</td>
+                <td class="p-4 font-mono text-sm">Ene 2024</td>
+                <td class="p-4 font-mono text-sm">$ 1.250</td>
+                <td class="p-4 font-mono text-sm">$ 56.250</td>
+                <td class="p-4 font-mono text-sm">$ 56.000</td>
+                <td class="p-4 bg-[var(--warning)]/10 text-[var(--warning)] rounded text-sm">⚠️ Diferencia en PDF</td>
+              </tr>
+              <tr class="border-b border-[var(--border-light)] hover:bg-[var(--bg-card)] transition-colors">
+                <td class="p-4 font-mono text-sm">PRAC-002</td>
+                <td class="p-4">Nobis Medical</td>
+                <td class="p-4 font-mono text-sm">Ene 2024</td>
+                <td class="p-4 font-mono text-sm">$ 980</td>
+                <td class="p-4 font-mono text-sm">$ 31.360</td>
+                <td class="p-4 font-mono text-sm">$ 31.360</td>
+                <td class="p-4 bg-[var(--success)]/10 text-[var(--success)] rounded text-sm">✅ Pago Correcto</td>
+              </tr>
+              <tr class="border-b border-[var(--border-light)] hover:bg-[var(--bg-card)] transition-colors">
+                <td class="p-4 font-mono text-sm">PRAC-003</td>
+                <td class="p-4">Obra Social Sindical</td>
+                <td class="p-4 font-mono text-sm">Ene 2024</td>
+                <td class="p-4 font-mono text-sm">$ 850</td>
+                <td class="p-4 font-mono text-sm">$ 56.950</td>
+                <td class="p-4 font-mono text-sm">$ 57.500</td>
+                <td class="p-4 bg-[var(--warning)]/10 text-[var(--warning)] rounded text-sm">𔁋 En Verificación</td>
+              </tr>
+              <tr class="border-b border-[var(--border-light)] hover:bg-[var(--bg-card)] transition-colors">
+                <td class="p-4 font-mono text-sm">PRAC-004</td>
+                <td class="p-4">Prepaga Nacional</td>
+                <td class="p-4 font-mono text-sm">Ene 2024</td>
+                <td class="p-4 font-mono text-sm">$ 1.250</td>
+                <td class="p-4 font-mono text-sm">$ 66.250</td>
+                <td class="p-4 font-mono text-sm">$ 66.500</td>
+                <td class="p-4 bg-[var(--warning)]/10 text-[var(--warning)] rounded text-sm">𔁋 En Verificación</td>
+              </tr>
+              <tr class="border-b border-[var(--border-light)] hover:bg-[var(--bg-card)] transition-colors">
+                <td class="p-4 font-mono text-sm">PRAC-005</td>
+                <td class="p-4">APROSS</td>
+                <td class="p-4 font-mono text-sm">Feb 2024</td>
+                <td class="p-4 font-mono text-sm">$ 1.250</td>
+                <td class="p-4 font-mono text-sm">$ 35.000</td>
+                <td class="p-4 font-mono text-sm">$ 35.000</td>
+                <td class="p-4 bg-[var(--success)]/10 text-[var(--success)] rounded text-sm">✅ Pago Correcto</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Tarjetas de resumen superior -->
+        <div class="grid grid-cols-3 gap-6 mt-8 reveal" style="transition-delay: 0.3s;">
+          <div class="p-6 rounded-2xl bg-[var(--bg-card)] border border-[var(--border-light)] text-center">
+            <div class="text-3xl font-bold text-[var(--text-primary)]" id="total-calculado">$ 238.250</div>
+            <div class="text-[var(--text-secondary)] text-sm mt-1">Total Calculado del Período</div>
+          </div>
+          <div class="p-6 rounded-2xl bg-[var(--bg-card)] border border-[var(--border-light)] text-center">
+            <div class="text-3xl font-bold text-[var(--text-primary)]" id="prestaciones-auditadas">125</div>
+            <div class="text-[var(--text-secondary)] text-sm mt-1">Cantidad de Prestaciones Auditadas</div>
+          </div>
+          <div class="p-6 rounded-2xl bg-[var(--bg-card)] border border-[var(--border-light)] text-center">
+            <div class="text-3xl font-bold text-[var(--accent-emerald)]" id="porcentaje-control">100%</div>
+            <div class="text-[var(--text-secondary)] text-sm mt-1">% de Control Completado</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sección Catálogo de Gestión, Recursos y Proyectos -->
+    <section id="catalogo" class="py-24 px-6 bg-[var(--bg-primary)] reveal">
+      <div class="max-w-7xl mx-auto">
+        <div class="mb-12 reveal">
+          <h2 class="text-3xl md:text-4xl font-bold text-[var(--text-primary)] mb-6">
+            Catálogo de Gestión, Recursos y Proyectos
+          </h2>
+          <p class="text-[var(--text-secondary)] text-lg">
+            Galería filtrable de mis proyectos, certificados y recursos de gestión. Filtra por categoría para explorar.
+          </p>
+        </div>
+
+        <!-- Filtros -->
+        <div class="mb-8 flex flex-wrap gap-3 reveal" style="transition-delay: 0.1s;">
+          <button class="filter-chip px-4 py-2 rounded-full text-sm font-medium bg-[var(--bg-card)] border border-[var(--border-light)] text-[var(--text-primary)] selected" data-category="todos">Todos</button>
+          <button class="filter-chip px-4 py-2 rounded-full text-sm font-medium bg-[var(--bg-card)] border border-[var(--border-light)] text-[var(--text-primary)]" data-category="gestion-excel">Gestión y Excel</button>
+          <button class="filter-chip px-4 py-2 rounded-full text-sm font-medium bg-[var(--bg-card)] border border-[var(--border-light)] text-[var(--text-primary)]" data-category="academico-economico">Académico y Economía</button>
+          <button class="filter-chip px-4 py-2 rounded-full text-sm font-medium bg-[var(--bg-card)] border border-[var(--border-light)] text-[var(--text-primary)]" data-category="oratoria-liderazgo">Oratoria y Liderazgo</button>
+        </div>
+
+        <!-- Galería -->
+        <div id="catalogo-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <!-- Los elementos se cargarán desde js/data.js -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Sección Educación, Habilidades e Idiomas -->
+    <section id="education" class="py-24 px-6">
+      <div class="max-w-7xl mx-auto">
+        <!-- Línea de tiempo académica -->
+        <div class="mb-24 reveal">
+          <h2 class="text-3xl md:text-4xl font-bold text-[var(--text-primary)] mb-12 text-center">Línea de Tiempo Académica</h2>
+          <div class="relative">
+            <!-- Puntos de la línea -->
+            <div class="absolute -top-1/2 -left-1/2 w-12 h-12 rounded-full bg-[var(--bg-card)] border border-[var(--border-light)] flex items-center justify-center" style="left: 50%; transform: translate(-50%, -50%);">
+              <i data-lucide=" GraduationCap" class="w-5 h-5 text-[var(--accent-royal)]" />
+            </div>
+
+            <!-- Universidad Nacional de Córdoba -->
+            <div class="relative pt-12">
+              <div class="flex justify-between items-start mb-4">
+                <h3 class="text-xl font-semibold text-[var(--text-primary)]">Universidad Nacional de Córdoba (UNC)</h3>
+                <span class="text-sm text-[var(--accent-royal)]">Ciencias Económicas</span>
+              </div>
+              <p class="text-[var(--text-secondary)] text-sm">
+                Carrera de <strong class="font-medium">Contador Público</strong> · Ingreso anticipado 2026 · Cursado desde 2027
+              </p>
+              <p class="text-[var(--text-secondary)] text-xs">
+                Orientación en Economía y Gestión de las Organizaciones complementando la formación contable con conocimientos estratégicos de administración y organización.
+              </p>
+            </div>
+
+            <div class="absolute -top-1/2 -left-1/2 w-12 h-12 rounded-full bg-[var(--bg-card)] border border-[var(--border-light)] flex items-center justify-center" style="left: 75%; transform: translate(-50%, -50%);">
+              <i data-lucide=" GraduationCap" class="w-5 h-5 text-[var(--accent-royal)]" />
+            </div>
+
+            <!-- Instituto Amparo de María -->
+            <div class="relative pt-12">
+              <div class="flex justify-between items-start mb-4">
+                <h3 class="text-xl font-semibold text-[var(--text-primary)]">Instituto Amparo de María</h3>
+                <span class="text-sm">Secundario</span>
+              </div>
+              <p class="text-[var(--text-secondary)] text-sm">
+                Nivel Secundario con Orientación en <strong class="font-medium">Economía y Gestión de las Organizaciones</strong> · Egreso 2026
+              </p>
+              <p class="text-[var(--text-secondary)] text-xs">
+                Base contable, administrativa y organizacional desarrollada durante el nivel secundario, enfocada en la gestión de recursos y el análisis económico.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Matriz de Habilidades y Competencias -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <!-- Habilidades -->
+          <div class="reveal">
+            <h3 class="text-2xl font-bold text-[var(--text-primary)] mb-6">Matriz de Habilidades y Competencias</h3>
+            
+            <div class="mb-6">
+              <h4 class="font-semibold text-[var(--text-primary)] mb-3">Herramientas</h4>
+              <div class="grid grid-cols-2 gap-3">
+                <span class="chip-tag px-3 py-1.5 rounded-full text-xs font-medium bg-[var(--border-light)] text-[var(--text-primary)]">Excel (registro y control de cobros)</span>
+                <span class="chip-tag px-3 py-1.5 rounded-full text-xs font-medium bg-[var(--border-light)] text-[var(--text-primary)]">Microsoft Word</span>
+              </div>
+            </div>
+
+            <div>
+              <h4 class="font-semibold text-[var(--text-primary)] mb-3">Competencias Clave</h4>
+              <div class="grid grid-cols-2 gap-3">
+                <span class="chip-tag px-3 py-1.5 rounded-full text-xs font-medium bg-[var(--border-light)] text-[var(--text-primary)]">Manejo de números</span>
+                <span class="chip-tag px-3 py-1.5 rounded-full text-xs font-medium bg-[var(--border-light)] text-[var(--text-primary)]">Organización de información</span>
+              </div>
+              <div class="grid grid-cols-2 gap-3">
+                <span class="chip-tag px-3 py-1.5 rounded-full text-xs font-medium bg-[var(--border-light)] text-[var(--text-primary)]">Trabajo autónomo</span>
+                <span class="chip-tag px-3 py-1.5 rounded-full text-xs font-medium bg-[var(--border-light)] text-[var(--text-primary)]">Investigación y redacción</span>
+              </div>
+              <div class="grid grid-cols-2 gap-3">
+                <span class="chip-tag px-3 py-1.5 rounded-full text-xs font-medium bg-[var(--border-light)] text-[var(--text-primary)]">Oratoria y negociación</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Idiomas -->
+          <div class="reveal">
+            <h3 class="text-2xl font-bold text-[var(--text-primary)] mb-6">Idiomas</h3>
+            <div class="space-y-4">
+              <div>
+                <span class="font-medium text-[var(--text-primary)]">Español</span>
+                <span class="text-[var(--accent-emerald)] font-medium">Nativo</span>
+              </div>
+              <div>
+                <span class="font-medium text-[var(--text-primary)]">Inglés</span>
+                <span class="text-[var(--accent-royal)] font-medium">Básico</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer / Contacto -->
+    <footer id="contacto" class="py-12 px-6 bg-[var(--bg-primary)] border-t border-[var(--border-light)]">
+      <div class="max-w-7xl mx-auto">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div>
+            <h4 class="font-semibold text-[var(--text-primary)] mb-4">Azul Ruiz</h4>
+            <p class="text-[var(--text-secondary)] text-sm">
+              Contador Público en formación · Especializada en control de cobros Excel · Administración
+            </p>
+          </div>
+
+          <div>
+            <h4 class="font-semibold text-[var(--text-primary)] mb-4">Enlaces Rápidos</h4>
+            <ul class="space-y-3 text-[var(--text-secondary)] text-sm">
+              <li><a href="#about" class="hover:text-[var(--text-primary)] transition-colors">Sobre Mí</a></li>
+              <li><a href="#experience" class="hover:text-[var(--text-primary)] transition-colors">Experiencia</a></li>
+              <li><a href="#catalogo" class="hover:text-[var(--text-primary)] transition-colors">Catálogo</a></li>
+              <li><a href="#education" class="hover:text-[var(--text-primary)] transition-colors">Educación</a></li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 class="font-semibold text-[var(--text-primary)] mb-4">Contacto</h4>
+            <p class="text-[var(--text-secondary)] text-sm mb-2 flex items-center gap-2">
+              <i data-lucide="phone" class="w-4 h-4" />
+              +54 9 351 206-2487
+            </p>
+            <p class="text-[var(--text-secondary)] text-sm mb-2 flex items-center gap-2">
+              <i data-lucide="mail" class="w-4 h-4" />
+              azulmartinaruizf@gmail.com
+            </p>
+            <p class="text-[var(--text-secondary)] text-sm flex items-center gap-2">
+              <i data-lucide="linkedin" class="w-4 h-4" />
+              <a href="https://www.linkedin.com/in/azul-ruiz" target="_blank" class="hover:text-[var(--accent-royal)] transition-colors">linkedin.com/in/azul-ruiz</a>
+            </p>
+          </div>
+
+          <div>
+            <h4 class="font-semibold text-[var(--text-primary)] mb-4">Redes Sociales</h4>
+            <div class="flex gap-3">
+              <!-- LinkedIn -->
+              <a href="https://www.linkedin.com/in/azul-ruiz" target="_blank" class="w-10 h-10 rounded-full bg-[var(--border-light)] flex items-center justify-center hover:bg-[var(--accent-royal)] transition-colors">
+                <i data-lucide="linkedin" class="w-5 h-5 text-[var(--text-primary)]" />
+              </a>
+              <!-- GitHub -->
+              <a href="https://github.com" target="_blank" class="w-10 h-10 rounded-full bg-[var(--border-light)] flex items-center justify-center hover:bg-[var(--accent-royal)] transition-colors">
+                <i data-lucide="git-branch" class="w-5 h-5 text-[var(--text-primary)]" />
+              </a>
+            </div>
+            <p class="mt-4 text-[var(--text-secondary)] text-xs">
+              © 2026 Azul Ruiz. Todos los derechos reservados.
+            </p>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-6 right-6 px-6 py-3 rounded-lg bg-[var(--bg-card)] border border-[var(--border-light)] text-[var(--text-primary)] opacity-0 shadow-lg transition-all z-50">
+      <span id="toast-message">Email copiado al portapapeles</span>
+      <button id="toast-close" class="ml-4 text-[var(--muted)] hover:opacity-80" aria-label="Cerrar">
+        <i data-lucide="x" class="w-4 h-4" />
+      </button>
+    </div>
+
+    <script>
+      // Inicializar Lucide Icons
+      lucide.createIcons();
+    </script>
+  </body>
+</html>

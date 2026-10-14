@@ -1,0 +1,23 @@
+# Dependencias y entornos de compilación
+node_modules/
+package-lock.json
+
+# Archivos de entorno y configuración sensibles
+.env
+*.env.local
+*.env.*.local
+
+# Archivos de sistema operativo
+.DS_Store
+Thumbs.db
+
+# Build outputs y carpetas temporales
+dist/
+build/
+.temp/
+
+# Archivos del sistema operativo
+Desktop.ini
+
+# Configuración personalada
+.settings/

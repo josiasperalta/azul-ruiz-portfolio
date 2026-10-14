@@ -1,0 +1,1085 @@
+/*
+  css/styles.css - Estilos principales del portafolio ejecutivo de Azul Ruiz
+  Estilo: Quiet Luxury Corporate / FinTech Executive
+  Paleta: Light Mode ejecutivo impecable con Dark Mode alternativo
+*/
+
+/* ===========================================
+   Variables CSS y Configuración de Paleta
+   =========================================== */
+:root {
+  --bg-primary: #F8FAFC;
+  --bg-card: #FFFFFF;
+  --bg-dark: #0B0F19;
+  --bg-dark-card: #111827;
+  --text-primary: #0F172A;
+  --text-secondary: #475569;
+  --accent-navy: #1E3A8A;
+  --accent-royal: #2563EB;
+  --accent-emerald: #10B981;
+  --border-light: #E2E8F0;
+  --border-dark: #1E293B;
+  --muted: #64748B;
+  --success: #10B981;
+  --warning: #F59E0B;
+}
+
+/* Modo oscuro */
+.dark-mode {
+  --bg-primary: #0B0F19;
+  --bg-card: #111827;
+  --text-primary: #F8FAFC;
+  --text-secondary: #F1F5F9;
+  --accent-navy: #3B82F6;
+  --accent-royal: #60A5FA;
+  --border-light: #374151;
+  --border-dark: #1E293B;
+  --muted: #94A3B8;
+}
+
+/* ===========================================
+   Reset y Base
+   =========================================== */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.6;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Tipografía serif para detalles editoriales */
+.font-serif {
+  font-family: 'Instrument Serif', serif;
+}
+
+/* Scrollbar personalizado */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--border-light);
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--accent-emerald);
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* ===========================================
+   Utilidades
+   =========================================== */
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.section-padding {
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+}
+
+.text-balance {
+  text-wrap: balance;
+}
+
+.leading-relaxed {
+  line-height: 1.8;
+}
+
+/* Colores utilitarios */
+.bg-primary { background-color: var(--bg-primary); }
+.bg-card { background-color: var(--bg-card); }
+.text-primary { color: var(--text-primary); }
+.text-secondary { color: var(--text-secondary); }
+.text-muted { color: var(--muted); }
+.accent-navy { color: var(--accent-navy); }
+.accent-royal { color: var(--accent-royal); }
+.accent-emerald { color: var(--accent-emerald); }
+
+/* ===========================================
+   Componentes UI
+   =========================================== */
+
+/* Chip tags */
+.chip-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.4rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  border: 1px solid var(--border-light);
+}
+
+.chip-tag:hover {
+  border-color: var(--accent-royal);
+  background-color: rgba(var(--accent-royal-rgb), 0.1);
+}
+
+/* Botones */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 30px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+  outline: none;
+}
+
+.btn:focus-visible {
+  outline: 2px solid var(--accent-royal);
+  outline-offset: 2px;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.btn:active {
+  transform: translateY(0);
+}
+
+/* Botón CTA principal */
+.btn-cta {
+  background-color: var(--accent-royal);
+  color: white;
+}
+
+.btn-cta:hover {
+  background-color: var(--accent-navy);
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4);
+}
+
+/* Botón Outline */
+.btn-outline {
+  background: transparent;
+  color: var(--text-primary);
+  border: 1px solid var(--border-light);
+}
+
+.btn-outline:hover {
+  border-color: var(--accent-royal);
+  color: var(--accent-royal);
+  background-color: rgba(39, 99, 235, 0.05);
+}
+
+/* Botón Outline Emerald */
+.btn-outline-emerald {
+  background: transparent;
+  color: var(--accent-emerald);
+  border: 1px solid var(--accent-emerald);
+}
+
+.btn-outline-emerald:hover {
+  border-color: var(--accent-emerald);
+  color: var(--accent-emerald);
+  background-color: rgba(16, 185, 129, 0.05);
+}
+
+/* Badge */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.4rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+/* Animación pulso para badge */
+.animate-pulse-badge {
+  animation: pulse-soft 2s ease-in-out infinite;
+}
+
+@keyframes pulse-soft {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.8; transform: scale(0.95); }
+}
+
+/* ===========================================
+   Navbar Flotante Glassmorphism
+   =========================================== */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.glass-nav {
+  backdrop-filter: blur(20px);
+  background: rgba(248, 250, 252, 0.9);
+  border-bottom: 1px solid var(--border-light);
+  transition: all 0.3s ease;
+}
+
+.dark-mode .glass-nav {
+  background: rgba(11, 15, 25, 0.9);
+  border-bottom-color: var(--border-dark);
+}
+
+.nav-link {
+  position: relative;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.nav-link:hover {
+  color: var(--text-primary);
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: var(--accent-royal);
+  transition: width 0.3s ease;
+}
+
+.nav-link:hover::after {
+  width: 100%;
+}
+
+/* Toggle Dark/Light Mode */
+.theme-toggle {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.dark-mode .theme-toggle {
+  background: var(--bg-dark-card);
+  border-color: var(--border-dark);
+}
+
+.theme-toggle:hover {
+  background: var(--accent-royal);
+  border-color: var(--accent-royal);
+}
+
+.theme-toggle:hover svg path {
+  stroke: white;
+}
+
+/* Menú móvil */
+.mobile-menu {
+  position: fixed;
+  top: 0;
+  right: -100%;
+  width: 60%;
+  max-width: 300px;
+  height: 100vh;
+  background: var(--bg-card);
+  border-left: 1px solid var(--border-light);
+  padding-top: 8rem;
+  z-index: 99;
+  transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: -4px 0 20px rgba(0, 0, 0, 0.2);
+}
+
+.mobile-menu.open {
+  right: 0;
+}
+
+.mobile-menu a {
+  display: block;
+  padding: 1rem 1.5rem;
+  color: var(--text-primary);
+  font-size: 1.125rem;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.mobile-menu a:hover {
+  color: var(--accent-royal);
+}
+
+/* ===========================================
+   Hero Section
+   =========================================== */
+.hero-section {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 3rem;
+  align-items: center;
+}
+
+@media (min-width: 768px) {
+  .hero-section {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/-- Hero Badge --*/
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.2rem;
+  background: linear-gradient(135deg, var(--accent-emerald), #059669);
+  color: white;
+  border-radius: 30px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  animation: fadeSlideUp 0.8s ease-out;
+}
+
+@keyframes fadeSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Título hero */
+.hero-title {
+  font-size: clamp(2rem, 6vw, 3.5rem);
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--text-primary);
+  margin-bottom: 1.5rem;
+}
+
+/* Subtítulo hero */
+.hero-subtitle {
+  font-size: clamp(1rem, 2vw, 1.25rem);
+  color: var(--text-secondary);
+  margin-bottom: 2rem;
+}
+
+/* Chips de cargos */
+.cargo-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+}
+
+.cargo-chip {
+  padding: 0.5rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  border: 1px solid var(--border-light);
+  color: var(--text-primary);
+  transition: all 0.2s ease;
+}
+
+.cargo-chip:hover {
+  border-color: var(--accent-royal);
+  background-color: rgba(39, 99, 235, 0.05);
+  color: var(--accent-royal);
+}
+
+/* Botones de acción hero */
+.action-buttons .btn {
+  padding: 0.875rem 1.75rem;
+  font-size: 1rem;
+}
+
+/* Marco de foto premium */
+.photo-frame {
+  position: relative;
+  aspect-ratio: 4/5;
+  border-radius: 1rem;
+  overflow: hidden;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.photo-frame:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 35px 60px -15px rgba(0, 0, 0, 0.15);
+}
+
+.dark-mode .photo-frame {
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
+}
+
+/* Overlay de ubicación */
+.location-overlay {
+  position: absolute;
+  bottom: 1rem;
+  left: 1rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: 0.5rem;
+  padding: 0.75rem 1rem;
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 180px;
+}
+
+.dark-mode .location-overlay {
+  border-color: var(--border-dark);
+}
+
+/* ===========================================
+   Sección Propuesta de Valor (Bento Grid)
+   =========================================== */
+.propuesta-section {
+  padding: 4rem 1rem;
+}
+
+.bento-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+/* Tarjetas Bento */
+.bento-card {
+  padding: 2rem;
+  border-radius: 1rem;
+  border: 1px solid var(--border-light);
+  background: var(--bg-card);
+  transition: all 0.3s ease;
+}
+
+.bento-card:hover {
+  border-color: var(--accent-royal);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
+}
+
+.dark-mode .bento-card:hover {
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+.bento-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+/* ===========================================
+   Sección Experiencia
+   =========================================== */
+.experience-section {
+  padding: 4rem 1rem;
+  background: var(--bg-primary);
+}
+
+.experience-section .section-title {
+  font-size: 2.25rem;
+  margin-bottom: 1rem;
+}
+
+.experience-section .section-subtitle {
+  color: var(--text-secondary);
+  max-width: 600px;
+  margin-bottom: 2rem;
+}
+
+/* Flujo de 4 Etapas */
+.process-flow {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.process-step {
+  position: relative;
+  padding: 1.5rem;
+  border-radius: 0.75rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  transition: all 0.3s ease;
+}
+
+.process-step:hover {
+  border-color: var(--accent-royal);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+}
+
+.process-step::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: -30px;
+  width: 12px;
+  height: 2px;
+  background: var(--border-light);
+  transform: translateY(-50%);
+}
+
+.process-step::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: -30px;
+  width: 8px;
+  height: 8px;
+  background: var(--border-light);
+  border-radius: 50%;
+  transform: translateY(-50%);
+}
+
+.process-step.active::before,
+.process-step.active::after {
+  background: var(--accent-royal);
+}
+
+.dark-mode .process-flow .process-step {
+  border-color: var(--border-dark);
+}
+
+.dark-mode .process-step.active::before,
+.dark-mode .process-step.active::after {
+  background: var(--accent-royal);
+}
+
+/* ===========================================
+   Simulador Excel (Vista Previa)
+   =========================================== */
+.simulator-section {
+  padding: 4rem 1rem;
+  background: var(--bg-primary);
+}
+
+.simulator-section .section-title {
+  font-size: 2.25rem;
+  margin-bottom: 1rem;
+}
+
+.simulator-section .section-subtitle {
+  color: var(--text-secondary);
+  max-width: 600px;
+  margin-bottom: 2rem;
+}
+
+/* Filtros del simulador */
+.filters-chip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+}
+
+.filter-chip {
+  padding: 0.6rem 1.2rem;
+  border-radius: 20px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border: 1px solid var(--border-light);
+  color: var(--text-primary);
+  background: var(--bg-card);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.filter-chip:hover {
+  border-color: var(--accent-royal);
+  color: var(--accent-royal);
+}
+
+.filter-chip.selected {
+  background: var(--accent-royal);
+  color: white;
+  border-color: var(--accent-royal);
+}
+
+.filter-chip:focus-visible {
+  outline: 2px solid var(--accent-royal);
+  outline-offset: 2px;
+}
+
+/* Tabla de control de cobros */
+.control-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--bg-card);
+  border-radius: 0.75rem;
+  overflow: hidden;
+}
+
+.control-table th {
+  background: var(--bg-dark);
+  color: var(--text-secondary);
+  padding: 1rem 1.25rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.control-table td {
+  border-bottom: 1px solid var(--border-light);
+}
+
+.control-table td:last-child {
+  border-bottom: none;
+}
+
+.control-table tbody tr {
+  transition: background-color 0.2s ease;
+}
+
+.control-table tbody tr:hover {
+  background-color: rgba(39, 99, 235, 0.03);
+}
+
+.control-table .state-listo {
+  color: var(--accent-emerald);
+  font-weight: 500;
+}
+
+.control-table .state-en-control {
+  color: var(--accent-royal);
+  font-weight: 500;
+}
+
+.control-table .state-liquidado {
+  color: var(--warning);
+  font-weight: 500;
+}
+
+/* Tarjetas de resumen superior */
+.summary-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.summary-card {
+  padding: 1.5rem;
+  border-radius: 0.75rem;
+  border: 1px solid var(--border-light);
+  background: var(--bg-card);
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.summary-card:hover {
+  border-color: var(--accent-royal);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.summary-card .value {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+}
+
+.summary-card .label {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.dark-mode .summary-card {
+  border-color: var(--border-dark);
+}
+
+.dark-mode .summary-card:hover {
+  border-color: var(--accent-royal);
+}
+
+/* ===========================================
+   Catálogo Sección
+   =========================================== */
+.catalogo-section {
+  padding: 4rem 1rem;
+  background: var(--bg-primary);
+}
+
+.catalogo-section .section-title {
+  font-size: 2.25rem;
+  margin-bottom: 1rem;
+}
+
+.catalogo-section .section-subtitle {
+  color: var(--text-secondary);
+  max-width: 600px;
+  margin-bottom: 2rem;
+}
+
+/* Filtros del catálogo */
+.catalogo-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+}
+
+.cato-filter-chip {
+  padding: 0.6rem 1.2rem;
+  border-radius: 20px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border: 1px solid var(--border-light);
+  color: var(--text-primary);
+  background: var(--bg-card);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.cato-filter-chip:hover {
+  border-color: var(--accent-royal);
+  color: var(--accent-royal);
+}
+
+.cato-filter-chip.selected {
+  background: var(--accent-royal);
+  color: white;
+}
+
+/* Tarjetas del catálogo */
+.catalogo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.catalogo-card {
+  padding: 1.5rem;
+  border-radius: 0.75rem;
+  border: 1px solid var(--border-light);
+  background: var(--bg-card);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.catalogo-card:hover {
+  border-color: var(--accent-royal);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
+}
+
+.dark-mode .catalogo-card:hover {
+  border-color: var(--accent-royal);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+.catalogo-card .categoria {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.65rem;
+  font-weight: 500;
+  margin-bottom: 0.75rem;
+}
+
+.catalogo-card .categoria.gestion-excel {
+  background: rgba(39, 99, 235, 0.1);
+  color: var(--accent-royal);
+}
+
+.catalogo-card .categoria.academico-economico {
+  background: rgba(16, 185, 129, 0.1);
+  color: var(--accent-emerald);
+}
+
+.catalogo-card .categoria.oratoria-liderazgo {
+  background: rgba(139, 92, 246, 0.1);
+  color: #a78bfa;
+}
+
+/* Modal */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+  z-index: 100;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+
+.modal-overlay.open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.modal-content {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: 1rem;
+  padding: 2rem;
+  max-width: 600px;
+  width: 90%;
+  z-index: 101;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.modal-overlay.open .modal-content {
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.dark-mode .modal-content {
+  border-color: var(--border-dark);
+}
+
+.modal-close {
+  position: absolute;
+  top: 1.25rem;
+  right: 1.25rem;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.modal-close:hover {
+  background: var(--accent-royal);
+  border-color: var(--accent-royal);
+  color: white;
+}
+
+.modal-detail h3 {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.modal-detail p {
+  color: var(--text-secondary);
+  margin-bottom: 1rem;
+}
+
+.modal-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.modal-tag {
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.65rem;
+  font-weight: 500;
+}
+
+/* ==========================================-
+   Sección Educación
+   =========================================== */
+.education-section {
+  padding: 4rem 1rem;
+  background: var(--bg-primary);
+}
+
+.education-section .section-title {
+  font-size: 2.25rem;
+  margin-bottom: 1rem;
+}
+
+.linea-tiempo {
+  position: relative;
+  padding-left: 2rem;
+}
+
+.linea-tiempo::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 2px;
+  height: 100%;
+  background: var(--border-light);
+}
+
+.fecha {
+  color: var(--accent-royal);
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+.lugar {
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  margin-bottom: 1rem;
+}
+
+/* Matriz de habilidades */
+.habilidades-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.habilidad-chip {
+  padding: 0.5rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  border: 1px solid var(--border-light);
+  background: var(--bg-card);
+  color: var(--text-primary);
+  transition: all 0.2s ease;
+}
+
+.habilidad-chip:hover {
+  border-color: var(--accent-royal);
+  background-color: rgba(39, 99, 235, 0.05);
+  color: var(--accent-royal);
+}
+
+/* ===========================================
+   Footer
+   =========================================== */
+.footer {
+  padding: 3rem 1rem;
+  border-top: 1px solid var(--border-light);
+  background: var(--bg-primary);
+}
+
+.dark-mode .footer {
+  border-color: var(--border-dark);
+  background: var(--bg-dark);
+}
+
+.footer a {
+  color: var(--text-secondary);
+  transition: color 0.2s ease;
+}
+
+.footer a:hover {
+  color: var(--accent-royal);
+}
+
+/* ===========================================
+   Toast Notification
+   =========================================== */
+.toast {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  padding: 0.75rem 1.25rem;
+  border-radius: 0.5rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.3s ease;
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.dark-mode .toast {
+  border-color: var(--border-dark);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .toast {
+    transition: opacity 0.1s ease;
+  }
+  .modal-content {
+    transition: none;
+  }
+  .mobile-menu {
+    transition: none;
+  }
+}
+
+/* ===========================================
+   RESPONSIVE: Sin desbordamiento horizontal y contenedores Scroll
+   =========================================== */
+html,
+body {
+  overflow-x: hidden;
+}
+
+/* Contenedor para tablas en celular - permite deslizar horizontalmente */
+.control-table-wrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Modales en celular - altura máxima y scroll vertical */
+.modal-overlay .modal-content {
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+/* Reducir el padding interno del modal cuando hay scroll */
+.modal-overlay .modal-content::-webkit-scrollbar {
+  width: 4px;
+}
+.modal-overlay .modal-content::-webkit-scrollbar-thumb {
+  background-color: var(--border-light);
+  border-radius: 2px;
+}
